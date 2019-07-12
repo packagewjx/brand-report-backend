@@ -24,12 +24,29 @@ public class Index {
      * 布尔类型数据
      */
     public static final String TYPE_BOOL = "bool";
+    /**
+     * 枚举类型
+     */
+    public static final String TYPE_ENUM = "enum";
+    /**
+     * 指标的集合，也就是处在指标层次结构中间节点的指标
+     */
+    public static final String TYPE_INDICES = "indices";
 
 
     /**
      * 指标的英文ID
      * <p>
      * 通常是使用英文连字符连接起来的一串有意义的文字。每一份报告中，每一个指标将引用这个ID作为键。
+     * <p>
+     * 起id规范：
+     * <ol>
+     * <li>若是拥有确定的统计时间，且将会有多个不同的统计周期指标时，
+     * 则使用时间周期开头，如annual，monthly，quarterly开头。</li>
+     * <li>若是上级指标的子指标，如果可能，指标中需要由上层指标的名称放前面，
+     * 如：上层指标为parent，本指标为index，则起名为parent-index</li>
+     * <li>使用有意义的英文，多个英文之间使用连字符分隔开</li>
+     * </ol>
      */
     @ApiModelProperty(value = "指标的英文ID。通常是使用连字符连接的表示指标内容的英文")
     private String indexId;
@@ -51,17 +68,17 @@ public class Index {
     /**
      * 指标具体数据的类型。使用Index类中的以`TYPE`开头的常量
      */
-    @ApiModelProperty(value = "本指标数据的具体类型", allowableValues = "number, string, bool", required = true)
+    @ApiModelProperty(value = "本指标数据的具体类型", allowableValues = "number, string, bool, enum, indices", required = true)
     private String type;
 
     /**
      * 数据统计时长
      * <p>
-     * 具体取值放置在Constants类中，以PERIOD_开头的常量
+     * 具体取值放置在Constants类中，以PERIOD_开头的常量。若是default，意味着本指标的统计周期与数据集和报告的统计周期一致
      *
      * @see io.github.packagewjx.brandreportbackend.domain.Constants
      */
-    @ApiModelProperty(value = "数据统计时长", allowableValues = "annual, monthly, quarterly")
+    @ApiModelProperty(value = "数据统计时长", allowableValues = "annual, monthly, quarterly, default")
     private String period;
 
     /**
