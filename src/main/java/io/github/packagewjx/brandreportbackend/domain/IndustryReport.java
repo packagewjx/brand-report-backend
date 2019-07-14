@@ -3,6 +3,7 @@ package io.github.packagewjx.brandreportbackend.domain;
 import io.github.packagewjx.brandreportbackend.domain.statistics.IndustryStatistics;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.Id;
 
 import java.util.Map;
 
@@ -11,6 +12,13 @@ import java.util.Map;
  */
 @ApiModel(description = "行业报告")
 public class IndustryReport {
+    /**
+     * 行业报告ID
+     */
+    @Id
+    @ApiModelProperty
+    private String industryId;
+
     /**
      * 行业名
      */
@@ -58,4 +66,68 @@ public class IndustryReport {
      */
     @ApiModelProperty("行业统计数据")
     private IndustryStatistics stat;
+
+    public String getIndustryId() {
+        return industryId;
+    }
+
+    public void setIndustryId(String industryId) {
+        this.industryId = industryId;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getQuarter() {
+        return quarter;
+    }
+
+    public void setQuarter(Integer quarter) {
+        this.quarter = quarter;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public Map<String, BrandReport> getBrandReports() {
+        return brandReports;
+    }
+
+    public void setBrandReports(Map<String, BrandReport> brandReports) {
+        this.brandReports = brandReports;
+    }
+
+    public IndustryStatistics getStat() {
+        return stat;
+    }
+
+    public void setStat(IndustryStatistics stat) {
+        this.stat = stat;
+    }
 }

@@ -2,6 +2,10 @@ package io.github.packagewjx.brandreportbackend.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 import java.util.Map;
@@ -15,6 +19,7 @@ public class BrandReport {
      * 报告Id
      */
     @ApiModelProperty("报告Id")
+    @Id
     private String reportId;
 
     /**
@@ -62,4 +67,69 @@ public class BrandReport {
      */
     @ApiModelProperty(value = "报告数据", required = true)
     private Map<String, Object> data;
+
+
+    public String getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(String reportId) {
+        this.reportId = reportId;
+    }
+
+    public String getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(String brandId) {
+        this.brandId = brandId;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getQuarter() {
+        return quarter;
+    }
+
+    public void setQuarter(Integer quarter) {
+        this.quarter = quarter;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
+    }
 }
