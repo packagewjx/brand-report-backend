@@ -2,6 +2,7 @@ package io.github.packagewjx.brandreportbackend.domain.statistics;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.Id;
 
 import java.util.Map;
 
@@ -13,6 +14,7 @@ public class IndustryStatistics {
     /**
      * Id
      */
+    @Id
     @ApiModelProperty("Id")
     private String statId;
 
@@ -53,4 +55,60 @@ public class IndustryStatistics {
      */
     @ApiModelProperty("统计数据")
     private Map<String, BaseStatistics> stats;
+
+    public String getStatId() {
+        return statId;
+    }
+
+    public void setStatId(String statId) {
+        this.statId = statId;
+    }
+
+    public String getIndustryId() {
+        return industryId;
+    }
+
+    public void setIndustryId(String industryId) {
+        this.industryId = industryId;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getQuarter() {
+        return quarter;
+    }
+
+    public void setQuarter(Integer quarter) {
+        this.quarter = quarter;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public Map<String, BaseStatistics> getStats() {
+        return stats;
+    }
+
+    public void setStats(Map<String, BaseStatistics> stats) {
+        this.stats = stats;
+    }
 }

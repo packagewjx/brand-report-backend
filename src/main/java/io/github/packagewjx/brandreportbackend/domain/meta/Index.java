@@ -2,6 +2,7 @@ package io.github.packagewjx.brandreportbackend.domain.meta;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.Id;
 
 import java.util.Map;
 
@@ -48,6 +49,7 @@ public class Index {
      * <li>使用有意义的英文，多个英文之间使用连字符分隔开</li>
      * </ol>
      */
+    @Id
     @ApiModelProperty(value = "指标的英文ID。通常是使用连字符连接的表示指标内容的英文")
     private String indexId;
 
@@ -100,4 +102,68 @@ public class Index {
      */
     @ApiModelProperty(value = "指标注解。用于存放自定义的额外数据，以供其他系统（统计系统、计分系统）处理")
     private Map<String, String> annotations;
+
+    public String getIndexId() {
+        return indexId;
+    }
+
+    public void setIndexId(String indexId) {
+        this.indexId = indexId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getParentIndexId() {
+        return parentIndexId;
+    }
+
+    public void setParentIndexId(String parentIndexId) {
+        this.parentIndexId = parentIndexId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Map<String, String> getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(Map<String, String> annotations) {
+        this.annotations = annotations;
+    }
 }
