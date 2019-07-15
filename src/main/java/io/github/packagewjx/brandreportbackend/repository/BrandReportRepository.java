@@ -30,8 +30,16 @@ public interface BrandReportRepository extends MongoRepository<BrandReport, Stri
 
     List<BrandReport> findByCreateTime(Date createtime);
 
+    /**
+     * 主键是唯一的，每次只会删除一个
+     * @param reportid 报告Id
+     */
     void deleteByReportId(String reportid);
 
+    /**
+     * 不唯一的键，在delete的时候，会删除所有具有相同键的Documents
+     * @param brandid 品牌Id
+     */
     void deleteByBrandId(String brandid);
 
     void deleteByYear(Integer year);
