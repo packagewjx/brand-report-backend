@@ -2,6 +2,7 @@ package io.github.packagewjx.brandreportbackend.domain.data;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.annotation.Id;
 
 import java.util.Map;
 
@@ -17,6 +18,7 @@ public class Collection {
     /**
      * 数据集合Id
      */
+    @Id
     @ApiModelProperty("数据集合Id")
     private String collectionId;
 
@@ -51,4 +53,52 @@ public class Collection {
      */
     @ApiModelProperty(value = "报告数据。键值对，键为indexId，值为具体数据", required = true)
     private Map<String, Object> data;
+
+    public String getCollectionId() {
+        return collectionId;
+    }
+
+    public void setCollectionId(String collectionId) {
+        this.collectionId = collectionId;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getQuarter() {
+        return quarter;
+    }
+
+    public void setQuarter(Integer quarter) {
+        this.quarter = quarter;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public String getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(String brandId) {
+        this.brandId = brandId;
+    }
+
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
+    }
 }
