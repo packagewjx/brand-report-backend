@@ -100,6 +100,14 @@ public class Collection {
         this.brandId = brandId;
     }
 
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
     public Map<String, Object> getData() {
         return data;
     }
