@@ -3,9 +3,11 @@ package io.github.packagewjx.brandreportbackend.repository.statistics;
 import io.github.packagewjx.brandreportbackend.domain.statistics.IndustryStatistics;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface IndustryStatisticsRepository extends MongoRepository<IndustryStatistics, String> {
     List<IndustryStatistics> findByStatId(String statid);
 
