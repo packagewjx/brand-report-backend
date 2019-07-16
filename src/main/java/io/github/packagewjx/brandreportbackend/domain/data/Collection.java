@@ -41,6 +41,12 @@ public class Collection {
     private Integer month;
 
     /**
+     * 数据统计时长
+     */
+    @ApiModelProperty(value = "数据统计时长", allowableValues = "annual, monthly, quarterly")
+    private String period;
+
+    /**
      * 数据所属品牌
      */
     @ApiModelProperty(value = "数据所属品牌", required = true)
