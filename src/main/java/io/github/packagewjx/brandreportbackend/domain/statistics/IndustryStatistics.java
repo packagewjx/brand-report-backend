@@ -19,10 +19,10 @@ public class IndustryStatistics {
     private String statId;
 
     /**
-     * 行业Id
+     * 行业
      */
-    @ApiModelProperty("行业Id")
-    private String industryId;
+    @ApiModelProperty("行业")
+    private String industry;
 
     /**
      * 统计数据年份
@@ -43,18 +43,30 @@ public class IndustryStatistics {
     private Integer quarter;
 
     /**
+     * 数据统计时长
+     */
+    @ApiModelProperty("数据统计时长")
+    private String period;
+    /**
      * 行业品牌总数
      * <p>
      * 参与统计的品牌总数
      */
     @ApiModelProperty("行业品牌总数")
     private Integer total;
-
     /**
      * 统计数据
      */
     @ApiModelProperty("统计数据")
     private Map<String, BaseStatistics> stats;
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
 
     public String getStatId() {
         return statId;
@@ -64,12 +76,12 @@ public class IndustryStatistics {
         this.statId = statId;
     }
 
-    public String getIndustryId() {
-        return industryId;
+    public String getIndustry() {
+        return industry;
     }
 
-    public void setIndustryId(String industryId) {
-        this.industryId = industryId;
+    public void setIndustry(String industry) {
+        this.industry = industry;
     }
 
     public Integer getYear() {

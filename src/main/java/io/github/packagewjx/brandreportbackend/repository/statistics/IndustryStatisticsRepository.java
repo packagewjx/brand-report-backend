@@ -11,9 +11,9 @@ import java.util.List;
 public interface IndustryStatisticsRepository extends MongoRepository<IndustryStatistics, String> {
     List<IndustryStatistics> findByStatId(String statid);
 
-    List<IndustryStatistics> findByIndustryId(String industryid);
+    List<IndustryStatistics> findByIndustry(String industry);
 
-    List<IndustryStatistics> findByIndustryIdAndYear(String industryid, String year);
+    List<IndustryStatistics> findByIndustryAndYear(String industry, Integer year);
 
     List<IndustryStatistics> findByYear(Integer year);
 
@@ -22,10 +22,9 @@ public interface IndustryStatisticsRepository extends MongoRepository<IndustrySt
 
     void deleteByStatId(String statid);
 
-    void deleteByIndustryId(String industryid);
+    void deleteByIndustry(String industry);
 
-    void deleteByIndustryIdAndYear(String industryid, Integer year);
-
+    void deleteByIndustryAndYear(String industry, Integer year);
 
 
 }

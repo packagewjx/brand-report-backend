@@ -7,11 +7,27 @@ public class NumberStatistics extends BaseStatistics {
      * 总值
      */
     @ApiModelProperty("总值")
-    Double sum;
+    private Double sum;
 
     /**
      * 均值
      */
     @ApiModelProperty("均值")
-    Double average;
+    private Double average;
+
+    public Double getSum() {
+        return sum;
+    }
+
+    public void setSum(Double sum) {
+        this.sum = sum;
+    }
+
+    public Double getAverage() {
+        return average;
+    }
+
+    public void setAverage(Double average) {
+        this.average = average;
+    }
 }

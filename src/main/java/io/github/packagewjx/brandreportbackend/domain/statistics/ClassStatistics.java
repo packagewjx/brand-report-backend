@@ -11,13 +11,13 @@ public class ClassStatistics extends BaseStatistics {
      * 每个取值的品牌数映射表
      */
     @ApiModelProperty("每个取值的品牌数映射表")
-    private Map<Object, Integer> counts;
+    private Map<?, Integer> counts;
 
-    public Map<Object, Integer> getCounts() {
+    public Map<?, Integer> getCounts() {
         return counts;
     }
 
-    public void setCounts(Map<Object, Integer> counts) {
+    public void setCounts(Map<?, Integer> counts) {
         this.counts = counts;
     }
 }
