@@ -12,12 +12,12 @@ public class Annotations {
      * <p>
      * 设置为true值起作用
      */
-    public static final String STAT_ANNOTATION_NO_COUNT = "no-count";
+    public static final String STAT_ANNOTATION_NO_COUNT = "statistics.no-count";
 
     /**
      * 统计时把null值当成是0值，计算平均值时将会计入这个null。默认是忽略null
      * <p>
      * 设置为true值起作用
      */
-    public static final String STAT_ANNOTATION_NULL_AS_ZERO = "null-as-zero";
+    public static final String STAT_ANNOTATION_NULL_AS_ZERO = "statistics.null-as-zero";
 }

@@ -87,9 +87,15 @@ public class Index {
     @ApiModelProperty("指标的数值单位")
     private String unit;
     /**
-     * 额外的注解
+     * 额外的注解，用于系统处理本指标数据时的自定义设置
      * <p>
-     * 用于系统处理本指标数据时存放自定义设置
+     * 注解的命名约定：
+     * <ul>
+     * <li>使用小写字母，使用连字符分隔单词</li>
+     * <li>为了避免重复，以及区分注解使用的子系统，注解的命名应该类似包名，使用句点(.)组成注解名的层次结构，注解层次应该体现注解的使用位置</li>
+     * </ul>
+     *
+     * <p>
      */
     @ApiModelProperty(value = "指标注解。用于存放自定义的额外数据，以供其他系统（统计系统、计分系统）处理")
     private Map<String, String> annotations;
