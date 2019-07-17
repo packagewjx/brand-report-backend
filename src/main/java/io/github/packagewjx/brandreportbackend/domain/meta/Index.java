@@ -33,8 +33,6 @@ public class Index {
      * 指标的集合，也就是处在指标层次结构中间节点的指标
      */
     public static final String TYPE_INDICES = "indices";
-
-
     /**
      * 指标的英文ID
      * <p>
@@ -52,13 +50,11 @@ public class Index {
     @Id
     @ApiModelProperty(value = "指标的英文ID。通常是使用连字符连接的表示指标内容的英文")
     private String indexId;
-
     /**
      * 指标的显示名称
      */
     @ApiModelProperty(value = "指标的显示名称。用于在展现时供用户查看")
     private String displayName;
-
     /**
      * 本指标的上级指标的indexId
      * <p>
@@ -66,13 +62,11 @@ public class Index {
      */
     @ApiModelProperty(value = "本指标的上级指标的indexId")
     private String parentIndexId;
-
     /**
      * 指标具体数据的类型。使用Index类中的以`TYPE`开头的常量
      */
     @ApiModelProperty(value = "本指标数据的具体类型", allowableValues = "number, string, bool, enum, indices", required = true)
     private String type;
-
     /**
      * 数据统计时长
      * <p>
@@ -82,19 +76,16 @@ public class Index {
      */
     @ApiModelProperty(value = "数据统计时长", allowableValues = "annual, monthly, quarterly, default")
     private String period;
-
     /**
      * 指标的详细描述
      */
     @ApiModelProperty("指标的详细描述")
     private String description;
-
     /**
      * 指标的数值单位
      */
     @ApiModelProperty("指标的数值单位")
     private String unit;
-
     /**
      * 额外的注解
      * <p>
@@ -102,6 +93,39 @@ public class Index {
      */
     @ApiModelProperty(value = "指标注解。用于存放自定义的额外数据，以供其他系统（统计系统、计分系统）处理")
     private Map<String, String> annotations;
+
+    @Override
+    public String toString() {
+        return "Index{" +
+                "indexId='" + indexId + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", parentIndexId='" + parentIndexId + '\'' +
+                ", type='" + type + '\'' +
+                ", period='" + period + '\'' +
+                ", description='" + description + '\'' +
+                ", unit='" + unit + '\'' +
+                ", annotations=" + annotations +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Index index = (Index) o;
+
+        return indexId.equals(index.indexId);
+    }
+
+    @Override
+    public int hashCode() {
+        return indexId.hashCode();
+    }
 
     public String getIndexId() {
         return indexId;

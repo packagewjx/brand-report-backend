@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
@@ -29,7 +30,7 @@ public class IndexService extends BaseServiceImpl<Index, String> {
      * @param rootIndexId 根IndexId
      * @return 叶子Index
      */
-    public List<Index> findChildIndices(String rootIndexId) {
+    public List<Index> getChildIndices(String rootIndexId) {
         if (rootIndexId == null || "".equals(rootIndexId) || !this.existById(rootIndexId)) {
             return Collections.emptyList();
         }
@@ -52,5 +53,14 @@ public class IndexService extends BaseServiceImpl<Index, String> {
                     .forEach(index -> queue.add(index.getIndexId()));
         }
         return result;
+    }
+
+    public List<Index> getAllChildIndices() {
+        return ((Collection<Index>) this.getAll()).parallelStream()
+                .filter(index -> !Index.TYPE_INDICES.equals(index.getType())).collect(Collectors.toList());
+    }
+
+    public List<Index> getAllByType(String type) {
+        return indexRepository.findByType(type);
     }
 }
