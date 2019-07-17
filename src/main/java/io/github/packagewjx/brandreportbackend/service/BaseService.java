@@ -20,7 +20,16 @@ public interface BaseService<T, ID> {
     T save(T val);
 
     /**
+     * 保存所有的实体
+     *
+     * @param val 实体集
+     * @return 保存后的实体集，若ID为空则会添加ID
+     */
+    Iterable<T> saveAll(Iterable<T> val);
+
+    /**
      * 删除val
+     *
      * @param val 要删除的实体
      */
     void delete(T val);
@@ -54,6 +63,14 @@ public interface BaseService<T, ID> {
      * @return 所有ID在ids集合的实体
      */
     Iterable<T> getAllById(Iterable<ID> ids);
+
+    /**
+     * 查看是否存在
+     *
+     * @param id ID
+     * @return 若存在则为true，否则为false
+     */
+    boolean existById(ID id);
 
     /**
      * 获取所有对象

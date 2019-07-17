@@ -24,6 +24,11 @@ public class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
     }
 
     @Override
+    public Iterable<T> saveAll(Iterable<T> val) {
+        return repository.saveAll(val);
+    }
+
+    @Override
     public void delete(T val) {
         repository.delete(val);
     }
@@ -34,8 +39,8 @@ public class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
     }
 
     @Override
-    public void deleteAll(Iterable<T> ids) {
-        repository.deleteAll(ids);
+    public void deleteAll(Iterable<T> entities) {
+        repository.deleteAll(entities);
     }
 
     @Override
@@ -46,6 +51,11 @@ public class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
     @Override
     public Iterable<T> getAllById(Iterable<ID> ids) {
         return repository.findAllById(ids);
+    }
+
+    @Override
+    public boolean existById(ID id) {
+        return repository.existsById(id);
     }
 
     @Override
