@@ -2,9 +2,11 @@
 
 ## Index注解设计
 
+**注解在系统中的定义是Map<String, String>**，因此下面所有的设置都需要是字符串类型。如果是一个对象，则改为Json字符串，且为显示正常，需要在一行内定义完毕。
+
 ### 指定计分类型
 
-计分类型使用`score.type`指定，根据目前实现的计分逻辑，拥有如下几种取值
+计分类型使用`score_type`指定，根据目前实现的计分逻辑，拥有如下几种取值
 
 - `bool`: 布尔型数据计分逻辑
 - `enum`: 枚举型数据计分逻辑
@@ -18,30 +20,45 @@
 
 |注解名|描述|值类型|
 |-----|-----|----|
-|`score.bool.true-score`|值为true时得到的分数|数字|
-|`score.bool.false-score`|值为false时得到的分数|数字|
+|`score_bool_true-score`|值为true时得到的分数|数字|
+|`score_bool_false-score`|值为false时得到的分数|数字|
 
 #### enum
 
-
 |注解名|描述|值类型|
 |-----|-----|----|
-|`score.enum.score-definition|分数的定义|EnumScoreDefinition类|
+|`score_enum_score-definition`|分数的定义|EnumScoreDefinition类|
+
+##### EnumScoreDefinition
+
+json样例
+
+```json
+{"definition":{"世界先进水平":100,"国内先进水平":80,"行业先进水平":60,"其他":30}}
+```
 
 #### ratio
 
 |注解名|描述|值类型|
 |-----|-----|----|
-|`score.ratio.total-score`|总分，最终得分是总分乘以比值|数字|
+|`score_ratio_total-score`|总分，最终得分是总分乘以比值|数字|
 
 #### step
 
 |注解名|描述|值类型|
 |-----|-----|----|
-|`score.step.score-definition`|分数定义|StepScoreDefinition类|
+|`score_step_score-definition`|分数定义|StepScoreDefinition类|
+
+##### StepScoreDefinition
+
+json样例
+
+```json
+{"intervalSplit":[1000,2000],"intervalScore":[30,60,100]}
+```
 
 #### multiply
 
 |注解名|描述|值类型|
 |-----|-----|----|
-|`score.multiply.multiplier`|乘法基准分。最终得分是指标的值乘以这个基准分|数字|
+|`score_multiply_multiplier`|乘法基准分。最终得分是指标的值乘以这个基准分|数字|
