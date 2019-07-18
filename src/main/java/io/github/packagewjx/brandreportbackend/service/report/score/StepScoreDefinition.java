@@ -10,11 +10,11 @@ import java.util.List;
  **/
 public class StepScoreDefinition {
     /**
-     * 划分数字区间的数字数组
+     * 划分数字区间的数组。值可以是数字，也可以是变量名的字符串，实现类将会读取该变量指代的数字
      * <p>
      * 根据本数组，划分的区间为：[负无穷，第一个元素), [第一个元素, 第二个元素), ... , [最后一个元素，正无穷]
      */
-    private List<Double> intervalSplit;
+    private List<Object> intervalSplit;
 
     /**
      * 各个区间对应的分数值，大小应该是intervalSplit的大小加1。注意，这个分数值将会是使用intervalSplit划分出来的区间中，
@@ -22,11 +22,11 @@ public class StepScoreDefinition {
      */
     private List<Integer> intervalScore;
 
-    public List<Double> getIntervalSplit() {
+    public List<Object> getIntervalSplit() {
         return intervalSplit;
     }
 
-    public void setIntervalSplit(List<Double> intervalSplit) {
+    public void setIntervalSplit(List<Object> intervalSplit) {
         this.intervalSplit = intervalSplit;
     }
 

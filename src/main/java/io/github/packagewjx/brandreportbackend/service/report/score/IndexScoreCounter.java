@@ -1,7 +1,6 @@
 package io.github.packagewjx.brandreportbackend.service.report.score;
 
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
-import io.github.packagewjx.brandreportbackend.domain.meta.Index;
 
 /**
  * 定义计算一个指标的分数的接口
@@ -11,10 +10,10 @@ import io.github.packagewjx.brandreportbackend.domain.meta.Index;
  **/
 public interface IndexScoreCounter {
     /**
-     * 根据指标，计算分数
+     * 根据某一个指标，计算分数。
      *
      * @param brandReport 品牌报告
      * @return 分数值
      */
-    int countScore(Index index, BrandReport brandReport);
+    int countScore(BrandReport brandReport);
 }

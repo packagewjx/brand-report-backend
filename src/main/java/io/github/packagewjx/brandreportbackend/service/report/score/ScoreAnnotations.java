@@ -44,6 +44,11 @@ public class ScoreAnnotations {
          * 阶梯式分数的定义。值为json，类型参考StepScoreDefinition
          */
         public static final String ANNOTATION_KEY_SCORE_DEFINITION = "score_step_score-definition";
+
+        /**
+         * 区间是否排除下界。默认false，即包含下界，排除上界。若为true，则排除下界，包含上界
+         */
+        public static final String ANNOTATION_KEY_LOWER_BOUND_EXCLUSIVE = "score_step_lower-bound-exclusive";
     }
 
     public static final class MultiplyScoreCounter {
@@ -61,8 +66,22 @@ public class ScoreAnnotations {
         /**
          * 比例型分数的满分，若值是1，则拿满分，否则按比例乘以总分得到
          */
-        public static final String ANNOTATION_KEY_SCORE_RATIO_TOTAL_SCORE = "score_score_ratio_total_score";
+        public static final String ANNOTATION_KEY_SCORE_RATIO_TOTAL_SCORE = "score_score-ratio_total-score";
 
+    }
+
+    public static final class LinearScoreCounter {
+        public static final String ANNOTATION_VALUE_TYPE = "linear";
+
+        /**
+         * 线性函数斜截式的斜率
+         */
+        public static final String ANNOTATION_KEY_SLOPE = "score_linear_slope";
+
+        /**
+         * 线性函数斜截式的截距
+         */
+        public static final String ANNOTATION_KEY_INTERCEPT = "score_linear_intercept";
     }
 
 }

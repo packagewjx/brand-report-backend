@@ -14,6 +14,7 @@
 - `step`: 阶梯式算分，给定不同的分数区间，计算分数
 - `multiply`: 乘法式给分，根据数据值，乘以给定的基准分数，取得最后的分数
 - `score-ratio`: 指标是比例型，如百分比，最终给分是总分乘以指标的值得出
+- `linear`: 线性函数计算给分，将指标的值作为自变量代入到函数中，得到总分
 
 ### 计分类型额外注解
 
@@ -49,6 +50,7 @@ json样例
 |注解名|描述|值类型|
 |-----|-----|----|
 |`score_step_score-definition`|分数定义|StepScoreDefinition类|
+|`score_step_lower-bound-exclusive`|区间是否排除下界。默认false，即包含下界，排除上界。若为true，则排除下界，包含上界|true或false|
 
 ##### StepScoreDefinition
 
@@ -69,3 +71,12 @@ json样例
 |注解名|描述|值类型|
 |-----|-----|----|
 |`score_score_ratio_total_score`|比例型分数的满分，若值是1，则拿满分，否则按比例乘以总分得到|数字|
+
+#### linear
+
+|注解名|描述|值类型|
+|-----|-----|----|
+|`score_linear_slope`|线性函数斜截式的斜率|数字|
+|`score_linear_intercept`|线性函数斜截式的截距|数字|
+|`score_linear_x-lower-bound`|自变量x的取值下界，默认负无穷|数字|
+|`score_linear_x-upper-bound`|自变量x的取值上界，默认正无穷|数字|
