@@ -5,18 +5,18 @@ package io.github.packagewjx.brandreportbackend.service.report.score;
  * @date 19-7-17
  **/
 public class ScoreAnnotations {
-    public static final String ANNOTATION_KEY_TYPE = "score.type";
+    public static final String ANNOTATION_KEY_TYPE = "score_type";
 
     private static final class BoolScoreCounter {
         public static final String ANNOTATION_VALUE_TYPE = "bool";
         /**
          * 值为true时得到的分数
          */
-        public static final String ANNOTATION_KEY_TRUE_SCORE = "score.bool.true-score";
+        public static final String ANNOTATION_KEY_TRUE_SCORE = "score_bool_true-score";
         /**
          * 值为false时得到的分数
          */
-        public static final String ANNOTATION_KEY_FALSE_SCORE = "score.bool.false-score";
+        public static final String ANNOTATION_KEY_FALSE_SCORE = "score_bool_false-score";
     }
 
     private static final class EnumScoreCounter {
@@ -25,7 +25,7 @@ public class ScoreAnnotations {
         /**
          * 分数的定义。值需要是一个json，键是enum的各个取值，对应的值则是该取值的分数
          */
-        public static final String ANNOTATION_KEY_ENUM_SCORE = "score.enum.score-definition";
+        public static final String ANNOTATION_KEY_ENUM_SCORE = "score_enum_score-definition";
     }
 
     public static final class RatioScoreCounter {
@@ -34,7 +34,7 @@ public class ScoreAnnotations {
         /**
          * 总分，最终得分是总分乘以比值
          */
-        public static final String ANNOTATION_KEY_TOTAL_SCORE = "score.ratio.total-score";
+        public static final String ANNOTATION_KEY_TOTAL_SCORE = "score_ratio_total-score";
     }
 
     public static final class StepScoreCounter {
@@ -43,7 +43,7 @@ public class ScoreAnnotations {
         /**
          * 阶梯式分数的定义。值为json，类型参考StepScoreDefinition
          */
-        public static final String ANNOTATION_KEY_SCORE_DEFINITION = "score.step.score-definition";
+        public static final String ANNOTATION_KEY_SCORE_DEFINITION = "score_step_score-definition";
     }
 
     public static final class MultiplyScoreCounter {
@@ -52,7 +52,17 @@ public class ScoreAnnotations {
         /**
          * 乘法基准分。最终得分是指标的值乘以这个基准分
          */
-        public static final String ANNOTATION_KEY_MULTIPLIER = "score.multiply.multiplier";
+        public static final String ANNOTATION_KEY_MULTIPLIER = "score_multiply_multiplier";
+    }
+
+    public static final class ScoreRatioScoreCounter {
+        public static final String ANNOTATION_VALUE_TYPE = "score-ratio";
+
+        /**
+         * 比例型分数的满分，若值是1，则拿满分，否则按比例乘以总分得到
+         */
+        public static final String ANNOTATION_KEY_SCORE_RATIO_TOTAL_SCORE = "score_score_ratio_total_score";
+
     }
 
 }
