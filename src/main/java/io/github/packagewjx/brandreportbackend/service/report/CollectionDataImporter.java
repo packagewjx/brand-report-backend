@@ -5,7 +5,7 @@ import io.github.packagewjx.brandreportbackend.domain.data.Collection;
 import io.github.packagewjx.brandreportbackend.service.impl.CollectionService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 本类将存储在Collection中的有效数据填充到BrandReport中。数据需要是与brandReport有相同的时间与品牌
@@ -26,7 +26,7 @@ public class CollectionDataImporter implements BrandReportDataImporter {
             return null;
         }
         if (brandReport.getData() == null) {
-            brandReport.setData(new HashMap<>(64));
+            brandReport.setData(new ConcurrentHashMap<>(64));
         }
         Collection clt = collectionService.getCombinedOneByTimeAndBrand(brandReport.getBrandId(), brandReport.getPeriod(),
                 brandReport.getYear(), brandReport.getMonth(), brandReport.getQuarter());

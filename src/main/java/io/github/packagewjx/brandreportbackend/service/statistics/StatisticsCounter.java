@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -62,7 +63,7 @@ public class StatisticsCounter implements Statistics {
                 .collect(Collectors.toList());
 
         List<Index> childIndices = indexService.getAllChildIndices();
-        Map<String, BaseStatistics> statisticsMap = new HashMap<>(childIndices.size());
+        Map<String, BaseStatistics> statisticsMap = new ConcurrentHashMap<>(childIndices.size());
         // 布尔类型统计
         Set<Index> boolIndices = childIndices.parallelStream().filter(index -> Index.TYPE_BOOL.equals(index.getType())).collect(Collectors.toSet());
         boolIndices.parallelStream().forEach(index -> {

@@ -39,6 +39,8 @@ public class ScoreCounterFactory {
         } else if (ScoreAnnotations.StepScoreCounter.ANNOTATION_VALUE_TYPE.equals(type)) {
             // 阶梯型
             return new StepScoreCounter(index);
+        } else if (ScoreAnnotations.RatioScoreCounter.ANNOTATION_VALUE_TYPE.equals(type)) {
+            return new RatioScoreCounter(index);
         } else {
             return DummyCounter.instance;
         }
