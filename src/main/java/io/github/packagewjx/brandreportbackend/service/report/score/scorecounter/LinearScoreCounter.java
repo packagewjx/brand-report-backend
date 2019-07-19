@@ -9,7 +9,7 @@ import io.github.packagewjx.brandreportbackend.service.report.score.ScoreAnnotat
  * @date 19-7-19
  **/
 public class LinearScoreCounter implements IndexScoreCounter {
-    public static final double DEFAULT_LOWER_BOUND = Double.MIN_VALUE;
+    public static final double DEFAULT_LOWER_BOUND = -Double.MAX_VALUE;
     public static final double DEFAULT_UPPER_BOUND = Double.MAX_VALUE;
 
     private String indexId;
@@ -17,6 +17,22 @@ public class LinearScoreCounter implements IndexScoreCounter {
     private double intercept;
     private double lowerBound;
     private double upperBound;
+
+    public LinearScoreCounter(String indexId, double slope, double intercept) {
+        this.indexId = indexId;
+        this.slope = slope;
+        this.intercept = intercept;
+        lowerBound = DEFAULT_LOWER_BOUND;
+        upperBound = DEFAULT_UPPER_BOUND;
+    }
+
+    public LinearScoreCounter(String indexId, double slope, double intercept, double lowerBound, double upperBound) {
+        this.indexId = indexId;
+        this.slope = slope;
+        this.intercept = intercept;
+        this.lowerBound = lowerBound;
+        this.upperBound = upperBound;
+    }
 
     public LinearScoreCounter(Index index) {
         if (index == null || index.getAnnotations() == null) {
