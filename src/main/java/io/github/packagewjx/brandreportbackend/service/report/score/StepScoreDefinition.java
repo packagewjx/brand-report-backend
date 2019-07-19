@@ -20,7 +20,7 @@ public class StepScoreDefinition {
      * 各个区间对应的分数值，大小应该是intervalSplit的大小加1。注意，这个分数值将会是使用intervalSplit划分出来的区间中，
      * 按顺序赋予区间分数，第一个区间赋予第一个分数，与intervalSplit的顺序无关。
      */
-    private List<Integer> intervalScore;
+    private List<Double> intervalScore;
 
     public List<Object> getIntervalSplit() {
         return intervalSplit;
@@ -30,11 +30,11 @@ public class StepScoreDefinition {
         this.intervalSplit = intervalSplit;
     }
 
-    public List<Integer> getIntervalScore() {
+    public List<Double> getIntervalScore() {
         return intervalScore;
     }
 
-    public void setIntervalScore(List<Integer> intervalScore) {
+    public void setIntervalScore(List<Double> intervalScore) {
         this.intervalScore = intervalScore;
     }
 }

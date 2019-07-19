@@ -1,4 +1,4 @@
-package io.github.packagewjx.brandreportbackend.service.report.score;
+package io.github.packagewjx.brandreportbackend.service.report.score.scorecounter;
 
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
 
@@ -15,5 +15,5 @@ public interface IndexScoreCounter {
      * @param brandReport 品牌报告
      * @return 分数值
      */
-    int countScore(BrandReport brandReport);
+    double countScore(BrandReport brandReport, Context ctx);
 }

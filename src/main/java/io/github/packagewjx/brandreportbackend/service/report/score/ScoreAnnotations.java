@@ -5,9 +5,17 @@ package io.github.packagewjx.brandreportbackend.service.report.score;
  * @date 19-7-17
  **/
 public class ScoreAnnotations {
+    /**
+     * 注释中说明指标的分数计算类型
+     */
     public static final String ANNOTATION_KEY_TYPE = "score_type";
 
-    private static final class BoolScoreCounter {
+    /**
+     * 注释中表明本指标是保存分数的指标。值为根Index的ID，指标的值将会是这个根ID其下面的所有Index的总分
+     */
+    public static final String ANNOTATION_KEY_SCORE_INDEX_FOR = "score_score-index-for";
+
+    public static final class BoolScoreCounter {
         public static final String ANNOTATION_VALUE_TYPE = "bool";
         /**
          * 值为true时得到的分数
@@ -19,7 +27,7 @@ public class ScoreAnnotations {
         public static final String ANNOTATION_KEY_FALSE_SCORE = "score_bool_false-score";
     }
 
-    private static final class EnumScoreCounter {
+    public static final class EnumScoreCounter {
         public static final String ANNOTATION_VALUE_TYPE = "enum";
 
         /**

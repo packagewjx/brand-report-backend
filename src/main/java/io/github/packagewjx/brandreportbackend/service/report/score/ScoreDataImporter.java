@@ -5,15 +5,22 @@ import io.github.packagewjx.brandreportbackend.BrandService;
 import io.github.packagewjx.brandreportbackend.domain.Brand;
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
 import io.github.packagewjx.brandreportbackend.domain.Constants;
+import io.github.packagewjx.brandreportbackend.domain.meta.Index;
 import io.github.packagewjx.brandreportbackend.domain.statistics.IndustryStatistics;
 import io.github.packagewjx.brandreportbackend.exception.EntityNotExistException;
+import io.github.packagewjx.brandreportbackend.service.IndexService;
 import io.github.packagewjx.brandreportbackend.service.IndustryStatisticsService;
 import io.github.packagewjx.brandreportbackend.service.report.BrandReportDataImporter;
+import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.BoolScoreCounter;
+import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.Context;
+import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.IndexScoreCounter;
 import io.github.packagewjx.brandreportbackend.service.statistics.StatisticsCounter;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * 负责计算分数的DataImporter
@@ -24,12 +31,45 @@ import java.util.Optional;
 public class ScoreDataImporter implements BrandReportDataImporter {
     private final IndustryStatisticsService industryStatisticsService;
     private final BrandService brandService;
-    private final StatisticsCounter counter;
+    private final StatisticsCounter statisticsCounter;
+    private final IndexService indexService;
+    private Map<String, IndexScoreCounter> counters;
+    /**
+     * 键为保存的指标，值为所有算分的指标，使用这些指标算完分数后，保存到键的指标中
+     */
+    private Map<Index, Set<Index>> countMap;
 
-    public ScoreDataImporter(IndustryStatisticsService industryStatisticsService, BrandService brandService, StatisticsCounter counter) {
+    public ScoreDataImporter(IndustryStatisticsService industryStatisticsService, BrandService brandService, StatisticsCounter statisticsCounter, IndexService indexService) {
         this.industryStatisticsService = industryStatisticsService;
         this.brandService = brandService;
-        this.counter = counter;
+        this.indexService = indexService;
+        this.statisticsCounter = statisticsCounter;
+
+        // 获取所有指标
+        Collection<Index> indices = (Collection<Index>) this.indexService.getAll();
+
+        // 获取保存分数的指标
+        Set<Index> scoreIndices = indices.parallelStream().filter(index -> index.getAnnotations() != null)
+                .filter(index -> index.getAnnotations().containsKey(ScoreAnnotations.ANNOTATION_KEY_SCORE_INDEX_FOR))
+                .collect(Collectors.toSet());
+        countMap = new ConcurrentHashMap<>();
+        scoreIndices.parallelStream().forEach(index -> {
+            Set<Index> childIndices = getChildIndices(index.getAnnotations().get(ScoreAnnotations.ANNOTATION_KEY_SCORE_INDEX_FOR), indices);
+            countMap.put(index, childIndices);
+        });
+
+        // 初始化计算类
+        counters = new HashMap<>(indices.size());
+        Map<String, Consumer<Index>> constructors = new HashMap<>(10);
+        // 布尔类型
+        constructors.put(ScoreAnnotations.BoolScoreCounter.ANNOTATION_VALUE_TYPE,
+                index -> counters.put(index.getIndexId(), new BoolScoreCounter(index)));
+        Consumer<Index> noopConsumer = index -> {
+        };
+
+        indices.forEach(index -> {
+            constructors.getOrDefault(index.getAnnotations().get(ScoreAnnotations.ANNOTATION_KEY_TYPE), noopConsumer).accept(index);
+        });
     }
 
     /**
@@ -69,7 +109,7 @@ public class ScoreDataImporter implements BrandReportDataImporter {
         }
 
         // 若没有保存，则返回计算值
-        return ret != null ? ret : counter.count(industry, year, month, quarter, period);
+        return ret != null ? ret : statisticsCounter.count(industry, year, month, quarter, period);
     }
 
 
@@ -86,8 +126,45 @@ public class ScoreDataImporter implements BrandReportDataImporter {
         String industry = oBrand.get().getIndustry();
         IndustryStatistics industryStatistics = getIndustryStatisticsAndTime(industry, brandReport.getPeriod(),
                 brandReport.getYear(), brandReport.getMonth(), brandReport.getQuarter());
+        Context ctx = new Context();
+        ctx.industryStatistics = industryStatistics;
 
+        countMap.entrySet().parallelStream().forEach(entry -> {
+            Set<Index> indices = entry.getValue();
+            Double sum = indices.stream()
+                    .map(index -> {
+                        IndexScoreCounter indexScoreCounter = counters.get(index.getIndexId());
+                        return indexScoreCounter == null ? 0.0 : indexScoreCounter.countScore(brandReport, ctx);
+                    })
+                    .reduce(Double::sum).orElse(0.0);
+            brandReport.getData().put(entry.getKey().getIndexId(), sum);
+        });
 
         return brandReport;
+    }
+
+
+    private Set<Index> getChildIndices(String rootIndexId, Collection<Index> indices) {
+        if (rootIndexId == null || "".equals(rootIndexId)) {
+            return Collections.emptySet();
+        }
+        Set<Index> result = new HashSet<>();
+        List<String> queue = new ArrayList<>();
+        queue.add(rootIndexId);
+        while (queue.size() > 0) {
+            String parentId = queue.get(0);
+            queue.remove(0);
+            // 叶子节点加入结果
+            indices.parallelStream()
+                    .filter(index -> parentId.equals(index.getParentIndexId()))
+                    .filter(index -> !index.getType().equals(Index.TYPE_INDICES))
+                    .forEach(result::add);
+            // 中间节点加入队列
+            indices.parallelStream()
+                    .filter(index -> parentId.equals(index.getParentIndexId()))
+                    .filter(index -> index.getType().equals(Index.TYPE_INDICES))
+                    .forEach(index -> queue.add(index.getIndexId()));
+        }
+        return result;
     }
 }
