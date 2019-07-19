@@ -90,6 +90,10 @@ public class ScoreAnnotations {
          * 线性函数斜截式的截距
          */
         public static final String ANNOTATION_KEY_INTERCEPT = "score_linear_intercept";
+
+        public static final String ANNOTATION_KEY_X_LOWER_BOUND = "score_linear_x-lower-bound";
+
+        public static final String ANNOTATION_KEY_X_UPPER_BOUND = "score_linear_x-upper-bound";
     }
 
 }

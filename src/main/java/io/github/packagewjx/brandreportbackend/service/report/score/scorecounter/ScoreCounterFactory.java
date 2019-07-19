@@ -43,6 +43,8 @@ public class ScoreCounterFactory {
             return new RatioScoreCounter(index);
         } else if (ScoreAnnotations.EnumScoreCounter.ANNOTATION_VALUE_TYPE.equals(type)) {
             return new EnumScoreCounter(index);
+        } else if (ScoreAnnotations.LinearScoreCounter.ANNOTATION_VALUE_TYPE.equals(type)) {
+            return new LinearScoreCounter(index);
         } else {
             return DummyCounter.instance;
         }
