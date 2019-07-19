@@ -7,13 +7,13 @@ import java.util.Map;
  * @date 19-7-17
  **/
 public class EnumScoreDefinition {
-    private Map<Object, Double> definition;
+    private Map<String, Double> definition;
 
-    public Map<Object, Double> getDefinition() {
+    public Map<String, Double> getDefinition() {
         return definition;
     }
 
-    public void setDefinition(Map<Object, Double> definition) {
+    public void setDefinition(Map<String, Double> definition) {
         this.definition = definition;
     }
 }

@@ -41,6 +41,8 @@ public class ScoreCounterFactory {
             return new StepScoreCounter(index);
         } else if (ScoreAnnotations.RatioScoreCounter.ANNOTATION_VALUE_TYPE.equals(type)) {
             return new RatioScoreCounter(index);
+        } else if (ScoreAnnotations.EnumScoreCounter.ANNOTATION_VALUE_TYPE.equals(type)) {
+            return new EnumScoreCounter(index);
         } else {
             return DummyCounter.instance;
         }
