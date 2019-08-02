@@ -60,49 +60,38 @@ public class ScoreDataImporter implements BrandReportDataImporter {
 
         // 初始化计算类
         counters = new HashMap<>(indices.size());
-        indices.forEach(index -> {
-            counters.put(index.getIndexId(), ScoreCounterFactory.instance.build(index));
-        });
+        indices.forEach(index -> counters.put(index.getIndexId(), ScoreCounterFactory.instance.build(index)));
     }
 
     /**
      * 查询或计算行业统计数据
      *
-     * @param industry 行业
-     * @param period   统计时长
-     * @param year     年份
-     * @param month    月份
-     * @param quarter  季度
+     * @param industry         行业
+     * @param period           统计时长
+     * @param year             年份
+     * @param periodTimeNumber 年内统计时间序号
      * @return 行业统计数据，保证非空
      */
-    private IndustryStatistics getIndustryStatisticsAndTime(String industry, String period, Integer year, Integer month, Integer quarter) {
-        Collection<IndustryStatistics> byIndustry = ((Collection<IndustryStatistics>) industryStatisticsService.getByIndustry(industry));
-        IndustryStatistics ret = null;
-        if (Constants.PERIOD_MONTHLY.equals(period)) {
-            if (month == null) {
-                throw new IllegalArgumentException("month不能为空");
-            }
-            ret = byIndustry.stream()
-                    .filter(industryStatistics -> Constants.PERIOD_MONTHLY.equals(industryStatistics.getPeriod()))
-                    .filter(industryStatistics -> year.equals(industryStatistics.getYear()) && month.equals(industryStatistics.getMonth()))
-                    .findAny().orElse(null);
-        } else if (Constants.PERIOD_QUARTERLY.equals(period)) {
-            if (quarter == null) {
-                throw new IllegalArgumentException("quarter不能为空");
-            }
-            ret = byIndustry.stream()
-                    .filter(industryStatistics -> Constants.PERIOD_QUARTERLY.equals(industryStatistics.getPeriod()))
-                    .filter(industryStatistics -> quarter.equals(industryStatistics.getMonth()) && year.equals(industryStatistics.getYear()))
-                    .findAny().orElse(null);
-        } else {
-            // 默认计算一年
+    private IndustryStatistics getIndustryStatisticsAndTime(String industry, String period, Integer year, Integer periodTimeNumber) {
+        Collection<IndustryStatistics> byIndustry = industryStatisticsService.getByIndustry(industry);
+        IndustryStatistics ret;
+        if (Constants.PERIOD_ANNUAL.equals(period)) {
             ret = byIndustry.stream()
                     .filter(industryStatistics -> year.equals(industryStatistics.getYear()))
                     .findAny().orElse(null);
+        } else {
+            if (periodTimeNumber == null || period == null) {
+                throw new IllegalArgumentException("periodTimeNumber与period不能为空");
+            }
+            ret = byIndustry.stream()
+                    .filter(industryStatistics -> period.equals(industryStatistics.getPeriod()))
+                    .filter(industryStatistics -> periodTimeNumber.equals(industryStatistics.getMonth()) && year.equals(industryStatistics.getYear()))
+                    .findAny().orElse(null);
+
         }
 
         // 若没有保存，则返回计算值
-        return ret != null ? ret : statisticsCounter.count(industry, year, month, quarter, period);
+        return ret != null ? ret : statisticsCounter.count(industry, year, period, periodTimeNumber);
     }
 
     @Override
@@ -117,7 +106,7 @@ public class ScoreDataImporter implements BrandReportDataImporter {
 
         String industry = oBrand.get().getIndustry();
         IndustryStatistics industryStatistics = getIndustryStatisticsAndTime(industry, brandReport.getPeriod(),
-                brandReport.getYear(), brandReport.getMonth(), brandReport.getQuarter());
+                brandReport.getYear(), brandReport.getPeriodTimeNumber());
         Context ctx = new Context();
         ctx.industryStatistics = industryStatistics;
 

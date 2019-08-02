@@ -29,16 +29,11 @@ public class Collection {
     private Integer year;
 
     /**
-     * 数据所属季度
+     * 在一年中，统计时长划分的各个不同统计时间。本字段为本报告所属统计时间的序号
+     * <p>
+     * 若统计时长是月份，则总共12个统计时间，取值范围为[1,12]。若是季度，则取值范围为[1,4]。若是年份，则忽略本字段。
      */
-    @ApiModelProperty(value = "数据所属季度", allowableValues = "[1,4]")
-    private Integer quarter;
-
-    /**
-     * 数据所属月份
-     */
-    @ApiModelProperty(value = "数据所属月份", allowableValues = "[1,12]")
-    private Integer month;
+    private Integer periodTimeNumber;
 
     /**
      * 数据统计时长
@@ -76,20 +71,12 @@ public class Collection {
         this.year = year;
     }
 
-    public Integer getQuarter() {
-        return quarter;
+    public Integer getPeriodTimeNumber() {
+        return periodTimeNumber;
     }
 
-    public void setQuarter(Integer quarter) {
-        this.quarter = quarter;
-    }
-
-    public Integer getMonth() {
-        return month;
-    }
-
-    public void setMonth(Integer month) {
-        this.month = month;
+    public void setPeriodTimeNumber(Integer periodTimeNumber) {
+        this.periodTimeNumber = periodTimeNumber;
     }
 
     public String getBrandId() {

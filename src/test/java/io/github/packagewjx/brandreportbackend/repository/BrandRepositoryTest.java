@@ -1,17 +1,11 @@
 package io.github.packagewjx.brandreportbackend.repository;
 
+import io.github.packagewjx.brandreportbackend.BaseTest;
 import io.github.packagewjx.brandreportbackend.domain.Brand;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@ContextConfiguration(locations = "classpath:spring-mongo.xml")
-public class BrandRepositoryTest {
+public class BrandRepositoryTest extends BaseTest {
     @Autowired
     private BrandRepository brandRepository;
 
@@ -31,12 +25,11 @@ public class BrandRepositoryTest {
 
     @Test
     public void testSave() {
-        if(brandRepository.findById("1").isPresent()){
+        if (brandRepository.findById("1").isPresent()) {
             Brand brand = brandRepository.findById("1").get();
             brand.setIndustry("改成了家电行业");
             brandRepository.save(brand);
-        }
-        else{
+        } else {
             System.out.println("not found");
         }
 

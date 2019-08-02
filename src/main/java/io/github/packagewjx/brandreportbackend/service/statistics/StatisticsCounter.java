@@ -53,17 +53,15 @@ public class StatisticsCounter implements Statistics {
     }
 
     @Override
-    public IndustryStatistics count(String industry, Integer year, Integer month, Integer quarter, String period) {
+    public IndustryStatistics count(String industry, Integer year, String period, Integer periodTimeNumber) {
         IndustryStatistics stat = new IndustryStatistics();
         stat.setYear(year);
-        stat.setMonth(month);
-        stat.setQuarter(quarter);
         stat.setPeriod(period);
         stat.setIndustry(industry);
 
         List<Brand> industryBrand = brandRepository.findByIndustry(industry);
         List<Collection> collections = industryBrand.parallelStream()
-                .map(brand -> collectionService.getCombinedOneByTimeAndBrand(brand.getBrandId(), period, year, month, quarter))
+                .map(brand -> collectionService.getCombinedOneByTimeAndBrand(brand.getBrandId(), period, year, periodTimeNumber))
                 .collect(Collectors.toList());
 
         List<Index> childIndices = indexService.getAllLeafIndices();

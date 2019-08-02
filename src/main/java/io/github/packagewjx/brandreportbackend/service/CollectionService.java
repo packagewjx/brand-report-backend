@@ -12,10 +12,9 @@ public interface CollectionService extends BaseService<Collection, String> {
      *
      * @param brandId 品牌ID
      * @param year    年份
-     * @param month   月份
-     * @param quarter 季度
      * @param period  统计时长
+     * @param periodTimeNumber 年内统计时间序号
      * @return 单个Collection，集合了所有指定品牌的指定统计时长的数据
      */
-    Collection getCombinedOneByTimeAndBrand(String brandId, String period, Integer year, Integer month, Integer quarter);
+    Collection getCombinedOneByTimeAndBrand(String brandId, String period, Integer year, Integer periodTimeNumber);
 }

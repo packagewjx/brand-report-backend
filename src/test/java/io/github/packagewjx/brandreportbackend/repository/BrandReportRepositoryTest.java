@@ -1,33 +1,20 @@
 package io.github.packagewjx.brandreportbackend.repository;
 
+import io.github.packagewjx.brandreportbackend.BaseTest;
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
-import org.bson.types.ObjectId;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@ContextConfiguration(locations = "classpath:spring-mongo.xml")
-public class BrandReportRepositoryTest {
+public class BrandReportRepositoryTest extends BaseTest {
 
     @Autowired
     private BrandReportRepository brandReportRepository;
-
-    enum color {
-        RED, GREEN, BLUE, YELLOW
-    }
 
     /**
      * insert 在新增文档时，如果有一个相同的_ID时，就会新增失败
@@ -39,8 +26,7 @@ public class BrandReportRepositoryTest {
         brandReport.setReportId("11"); //若使用mongodb自动生成的ID，就不用set Id了
         brandReport.setBrandId("meidi");
         brandReport.setYear(2018);
-        brandReport.setQuarter(1);
-        brandReport.setMonth(3);
+        brandReport.setPeriodTimeNumber(1);
         brandReport.setPeriod("quarter");
         brandReport.setCreateTime(new Date());
 
@@ -58,8 +44,7 @@ public class BrandReportRepositoryTest {
         brandReport1.setReportId("22");//若使用mongodb自动生成的ID，就不用set Id了
         brandReport1.setBrandId("haier");
         brandReport1.setYear(2018);
-        brandReport1.setQuarter(1);
-        brandReport1.setMonth(3);
+        brandReport1.setPeriodTimeNumber(1);
         brandReport1.setPeriod("quarter");
         brandReport1.setCreateTime(new Date());
 
@@ -73,7 +58,6 @@ public class BrandReportRepositoryTest {
 
         brandReportRepository.insert(brandReport1);
     }
-
 
     /**
      * 在进行Save操作时，未指定新值的属性将会被置空，mongodb文档中原来的值也会被置空。
@@ -92,7 +76,7 @@ public class BrandReportRepositoryTest {
         //修改id为1的year属性
         brandReport.setBrandId("meidi");
         brandReport.setYear(2013);          //改成2015
-        brandReport.setQuarter(2);
+        brandReport.setPeriodTimeNumber(2);
 
         brandReportRepository.save(brandReport);
     }
@@ -115,7 +99,6 @@ public class BrandReportRepositoryTest {
         brandReportRepository.save(brandReport);
     }
 
-
     @Test
     public void testFindAll() {
         brandReportRepository.findAll().parallelStream().forEach(brandReport -> {
@@ -123,8 +106,7 @@ public class BrandReportRepositoryTest {
             System.out.println(brandReport.getBrandId() + " ReportId data: " + brandReport.getReportId());
             System.out.println(brandReport.getBrandId() + " BrandId data: " + brandReport.getBrandId());
             System.out.println(brandReport.getBrandId() + "data: " + brandReport.getYear());
-            System.out.println(brandReport.getBrandId() + "data: " + brandReport.getMonth());
-            System.out.println(brandReport.getBrandId() + "data: " + brandReport.getQuarter());
+            System.out.println(brandReport.getBrandId() + "data: " + brandReport.getPeriodTimeNumber());
             System.out.println(brandReport.getBrandId() + "data: " + brandReport.getPeriod());
             System.out.println(brandReport.getBrandId() + "data: " + brandReport.getCreateTime());
             System.out.println(brandReport.getBrandId() + "data: " + brandReport.getData());
@@ -138,17 +120,17 @@ public class BrandReportRepositoryTest {
         ExampleMatcher exampleMatcher = ExampleMatcher.matching();
         Example<BrandReport> example = Example.of(brandReport, exampleMatcher);
 
-        if(brandReportRepository.findOne(example).isPresent()){
+        if (brandReportRepository.findOne(example).isPresent()) {
             brandReport = brandReportRepository.findOne(example).get();
-            System.out.println(brandReport.getBrandId() + " "+ brandReport.getReportId()+" "+ brandReport.getYear());
+            System.out.println(brandReport.getBrandId() + " " + brandReport.getReportId() + " " + brandReport.getYear());
         }
     }
 
     @Test
     public void testFindById() {
-        if(brandReportRepository.findById("22").isPresent()){
+        if (brandReportRepository.findById("22").isPresent()) {
             BrandReport brandReport = brandReportRepository.findById("22").get();
-            System.out.println(brandReport.getBrandId() + " "+ brandReport.getReportId()+" "+ brandReport.getYear());
+            System.out.println(brandReport.getBrandId() + " " + brandReport.getReportId() + " " + brandReport.getYear());
         }
 
     }
@@ -160,12 +142,16 @@ public class BrandReportRepositoryTest {
 
     @Test
     public void testFindByYearGreaterThan() {
-        brandReportRepository.findByYearGreaterThan(2015).parallelStream().forEach(brandReport -> System.out.println(brandReport.getReportId()+ "  "+ brandReport.getBrandId()+ "  " + brandReport.getYear()));
+        brandReportRepository.findByYearGreaterThan(2015).parallelStream().forEach(brandReport -> System.out.println(brandReport.getReportId() + "  " + brandReport.getBrandId() + "  " + brandReport.getYear()));
     }
 
     @Test
     public void testFindByYearBetween() {
-        brandReportRepository.findByYearBetween(2013, 2017).parallelStream().forEach(brandReport -> System.out.println(brandReport.getReportId()+ "  "+ brandReport.getBrandId()+ "  " + brandReport.getYear()));
+        brandReportRepository.findByYearBetween(2013, 2017).parallelStream().forEach(brandReport -> System.out.println(brandReport.getReportId() + "  " + brandReport.getBrandId() + "  " + brandReport.getYear()));
+    }
+
+    enum color {
+        RED, GREEN, BLUE, YELLOW
     }
 
 }

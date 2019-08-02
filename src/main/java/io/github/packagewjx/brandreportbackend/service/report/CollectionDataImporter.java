@@ -29,7 +29,7 @@ public class CollectionDataImporter implements BrandReportDataImporter {
             brandReport.setData(new ConcurrentHashMap<>(64));
         }
         Collection clt = collectionService.getCombinedOneByTimeAndBrand(brandReport.getBrandId(), brandReport.getPeriod(),
-                brandReport.getYear(), brandReport.getMonth(), brandReport.getQuarter());
+                brandReport.getYear(), brandReport.getPeriodTimeNumber());
         brandReport.getData().putAll(clt.getData());
         return brandReport;
     }

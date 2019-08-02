@@ -17,7 +17,7 @@ public class StatisticsCounterTest extends BaseTest {
 
     @Test
     public void count() {
-        IndustryStatistics stat = counter.count("家电", 2018, 0, 0, Constants.PERIOD_ANNUAL);
+        IndustryStatistics stat = counter.count("家电", 2018, Constants.PERIOD_ANNUAL, null);
         Assert.assertNotNull(stat);
         Assert.assertNotNull(stat.getStats());
         Assert.assertEquals("家电", stat.getIndustry());

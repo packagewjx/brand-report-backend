@@ -16,15 +16,14 @@ public interface BrandReportRepository extends MongoRepository<BrandReport, Stri
 
     List<BrandReport> findByYear(Integer year);
 
-    @Query("{'year':{'$gt':?0}}")       //?0、?1、?2是函数参数的占位符，从左到右依次类推
+    @Query("{'year':{'$gt':?0}}")
+        //?0、?1、?2是函数参数的占位符，从左到右依次类推
     List<BrandReport> findByYearGreaterThan(Integer gtYear);
 
     @Query("{'year':{'$gt':?0, '$lt':?1}}")
     List<BrandReport> findByYearBetween(Integer from, Integer to);
 
-    List<BrandReport> findByQuarter(Integer quarter);
-
-    List<BrandReport> findByMonth(Integer month);
+    List<BrandReport> findByPeriodTimeNumber(Integer quarter);
 
     List<BrandReport> findByPeriod(String period);
 
@@ -32,21 +31,21 @@ public interface BrandReportRepository extends MongoRepository<BrandReport, Stri
 
     /**
      * 主键是唯一的，每次只会删除一个
+     *
      * @param reportid 报告Id
      */
     void deleteByReportId(String reportid);
 
     /**
      * 不唯一的键，在delete的时候，会删除所有具有相同键的Documents
-     * @param brandid 品牌Id
+     *
+     * @param brandId 品牌Id
      */
-    void deleteByBrandId(String brandid);
+    void deleteByBrandId(String brandId);
 
     void deleteByYear(Integer year);
 
-    void deleteByQuarter(Integer quarter);
-
-    void deleteByMonth(Integer month);
+    void deleteByPeriodTimeNumber(Integer quarter);
 
     void deleteByPeriod(String period);
 

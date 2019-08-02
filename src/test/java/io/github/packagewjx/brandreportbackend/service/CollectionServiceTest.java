@@ -119,7 +119,7 @@ public class CollectionServiceTest extends BaseTest {
     @Test
     public void getCombinedOneByTimeAndBrand() {
         String brandId = service.getAll().iterator().next().getBrandId();
-        Collection combinedOneByTimeAndBrand = service.getCombinedOneByTimeAndBrand(brandId, Constants.PERIOD_ANNUAL, 2018, null, null);
+        Collection combinedOneByTimeAndBrand = service.getCombinedOneByTimeAndBrand(brandId, Constants.PERIOD_ANNUAL, 2018, null);
         Assert.assertNotNull(combinedOneByTimeAndBrand);
         Assert.assertNotNull(combinedOneByTimeAndBrand.getData());
         Assert.assertEquals((Integer) 2018, combinedOneByTimeAndBrand.getYear());
@@ -145,7 +145,7 @@ public class CollectionServiceTest extends BaseTest {
         service.save(c1);
         id[1] = c1.getCollectionId();
 
-        Collection c = service.getCombinedOneByTimeAndBrand(brandId, Constants.PERIOD_ANNUAL, 2020, null, null);
+        Collection c = service.getCombinedOneByTimeAndBrand(brandId, Constants.PERIOD_ANNUAL, 2020, null);
         Assert.assertEquals(2, c.getData().size());
 
         // 删除多余的两个集合

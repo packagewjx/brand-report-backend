@@ -1,22 +1,16 @@
 package io.github.packagewjx.brandreportbackend.repository.data;
 
+import io.github.packagewjx.brandreportbackend.BaseTest;
 import io.github.packagewjx.brandreportbackend.domain.data.Collection;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@ContextConfiguration(locations = "classpath:spring-mongo.xml")
-public class CollectionRepositoryTest {
+public class CollectionRepositoryTest extends BaseTest {
     @Autowired
     CollectionRepository collectionRepository;
 
@@ -27,8 +21,7 @@ public class CollectionRepositoryTest {
         collection1.setCollectionId("11");
         collection1.setBrandId("meidi");
         collection1.setYear(2018);
-        collection1.setMonth(6);
-        collection1.setQuarter(2);
+        collection1.setPeriodTimeNumber(1);
 
         Map<String, Object> map1 = new HashMap<>();
         map1.put("gross_output", 1000);
@@ -41,8 +34,7 @@ public class CollectionRepositoryTest {
         collection2.setCollectionId("22");
         collection2.setBrandId("meidi");
         collection2.setYear(2017);
-        collection2.setMonth(6);
-        collection2.setQuarter(2);
+        collection2.setPeriodTimeNumber(1);
 
         Map<String, Object> map2 = new HashMap<>();
         map2.put("gross_output", 1000);
@@ -55,8 +47,7 @@ public class CollectionRepositoryTest {
         collection3.setCollectionId("33");
         collection3.setBrandId("haier");
         collection3.setYear(2018);
-        collection3.setMonth(6);
-        collection3.setQuarter(2);
+        collection3.setPeriodTimeNumber(3);
 
         Map<String, Object> map3 = new HashMap<>();
         map3.put("gross_output", 1000);

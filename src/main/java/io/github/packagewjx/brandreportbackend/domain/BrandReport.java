@@ -2,10 +2,7 @@ package io.github.packagewjx.brandreportbackend.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 import java.util.Map;
@@ -33,19 +30,13 @@ public class BrandReport {
      */
     @ApiModelProperty(value = "报告年份", required = true)
     private Integer year;
-
     /**
-     * 报告季度
+     * 在一年中，统计时长划分的各个不同统计时间。本报告所属统计时间的序号
+     * <p>
+     * 若统计时长是月份，则总共12个统计时间，取值范围为[1,12]。若是季度，则取值范围为[1,4]。若是年份，则忽略本字段。
      */
-    @ApiModelProperty("报告季度")
-    private Integer quarter;
-
-    /**
-     * 报告月份
-     */
-    @ApiModelProperty("报告月份")
-    private Integer month;
-
+    @ApiModelProperty()
+    private Integer periodTimeNumber;
     /**
      * 报告数据时长
      * <p>
@@ -53,13 +44,11 @@ public class BrandReport {
      */
     @ApiModelProperty(value = "报告数据时长，区分月度报告、季度报告还是年度报告", allowableValues = "annual, month, quarter", required = true)
     private String period;
-
     /**
      * 报告创建时间
      */
     @ApiModelProperty(value = "创建时间", required = true)
     private Date createTime;
-
     /**
      * 报告数据
      * <p>
@@ -68,6 +57,13 @@ public class BrandReport {
     @ApiModelProperty(value = "报告数据", required = true)
     private Map<String, Object> data;
 
+    public Integer getPeriodTimeNumber() {
+        return periodTimeNumber;
+    }
+
+    public void setPeriodTimeNumber(Integer periodTimeNumber) {
+        this.periodTimeNumber = periodTimeNumber;
+    }
 
     public String getReportId() {
         return reportId;
@@ -91,22 +87,6 @@ public class BrandReport {
 
     public void setYear(Integer year) {
         this.year = year;
-    }
-
-    public Integer getQuarter() {
-        return quarter;
-    }
-
-    public void setQuarter(Integer quarter) {
-        this.quarter = quarter;
-    }
-
-    public Integer getMonth() {
-        return month;
-    }
-
-    public void setMonth(Integer month) {
-        this.month = month;
     }
 
     public String getPeriod() {

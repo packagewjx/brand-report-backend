@@ -28,7 +28,7 @@ public class CollectionServiceImpl extends BaseServiceImpl<Collection, String> i
     }
 
     @Override
-    public Collection getCombinedOneByTimeAndBrand(String brandId, String period, Integer year, Integer month, Integer quarter) {
+    public Collection getCombinedOneByTimeAndBrand(String brandId, String period, Integer year, Integer periodTimeNumber) {
         List<Collection> byBrandIdAndYear = repository.findByBrandIdAndYear(brandId, year);
 
         if (byBrandIdAndYear.size() == 1) {
@@ -37,17 +37,17 @@ public class CollectionServiceImpl extends BaseServiceImpl<Collection, String> i
 
         Collection combine = new Collection();
         combine.setYear(year);
-        combine.setMonth(month);
-        combine.setQuarter(quarter);
         combine.setPeriod(period);
+        combine.setPeriodTimeNumber(periodTimeNumber);
 
         Stream<Collection> stream;
-        if (period.equals(Constants.PERIOD_MONTHLY)) {
-            stream = byBrandIdAndYear.stream().filter(collection -> month.equals(collection.getMonth()));
-        } else if (period.equals(Constants.PERIOD_QUARTERLY)) {
-            stream = byBrandIdAndYear.stream().filter(collection -> quarter.equals(collection.getQuarter()));
-        } else {
+        if (period.equals(Constants.PERIOD_ANNUAL)) {
             stream = byBrandIdAndYear.stream();
+        } else {
+            if (periodTimeNumber == null) {
+                throw new IllegalArgumentException("periodTimeNumber不能为空");
+            }
+            stream = byBrandIdAndYear.stream().filter(collection -> periodTimeNumber.equals(collection.getPeriodTimeNumber()));
         }
 
         Optional<Map<String, Object>> combinedMap = stream.map(Collection::getData)
