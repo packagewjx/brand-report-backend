@@ -3,7 +3,6 @@ package io.github.packagewjx.brandreportbackend.service;
 import io.github.packagewjx.brandreportbackend.BaseTest;
 import io.github.packagewjx.brandreportbackend.domain.Constants;
 import io.github.packagewjx.brandreportbackend.domain.data.Collection;
-import io.github.packagewjx.brandreportbackend.service.impl.CollectionService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +43,7 @@ public class CollectionServiceTest extends BaseTest {
         List<String> _10ids = collections.stream().limit(testSize).map(Collection::getCollectionId).collect(Collectors.toList());
         all = service.getAllById(_10ids);
         Assert.assertEquals(testSize, ((java.util.Collection<Collection>) all).size());
-        all.forEach(c -> {
-            Assert.assertTrue(_10ids.contains(c.getCollectionId()));
-        });
+        all.forEach(c -> Assert.assertTrue(_10ids.contains(c.getCollectionId())));
 
         String[] ids = new String[2];
         // 制造两个无用的进行操作
@@ -60,21 +57,19 @@ public class CollectionServiceTest extends BaseTest {
         Optional<Collection> oc1 = service.getById(ids[0]);
         Assert.assertTrue(oc1.isPresent());
         Collection c1 = oc1.get();
-        Collection c2 = collection;
-        collection = null;
 
         c1.getData().put("c1", "c1");
-        c2.getData().put("c2", "c2");
+        collection.getData().put("c2", "c2");
 
         List<Collection> testCollection = new ArrayList<>();
         testCollection.add(c1);
-        testCollection.add(c2);
+        testCollection.add(collection);
         // 测试saveall
         Iterable<Collection> retCol = service.saveAll(testCollection);
         retCol.forEach(c -> {
             if (c.getCollectionId().equals(c1.getCollectionId())) {
                 Assert.assertEquals("c1", c.getData().get("c1"));
-            } else if (c.getCollectionId().equals(c2.getCollectionId())) {
+            } else if (c.getCollectionId().equals(collection.getCollectionId())) {
                 Assert.assertEquals("c2", c.getData().get("c2"));
             } else {
                 Assert.fail("返回值不包含c1或c2");

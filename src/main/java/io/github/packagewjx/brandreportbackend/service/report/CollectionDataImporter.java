@@ -2,7 +2,7 @@ package io.github.packagewjx.brandreportbackend.service.report;
 
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
 import io.github.packagewjx.brandreportbackend.domain.data.Collection;
-import io.github.packagewjx.brandreportbackend.service.impl.CollectionService;
+import io.github.packagewjx.brandreportbackend.service.CollectionService;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentHashMap;

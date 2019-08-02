@@ -10,8 +10,8 @@ import io.github.packagewjx.brandreportbackend.domain.statistics.data.BaseStatis
 import io.github.packagewjx.brandreportbackend.domain.statistics.data.ClassStatistics;
 import io.github.packagewjx.brandreportbackend.domain.statistics.data.NumberStatistics;
 import io.github.packagewjx.brandreportbackend.repository.BrandRepository;
+import io.github.packagewjx.brandreportbackend.service.CollectionService;
 import io.github.packagewjx.brandreportbackend.service.IndexService;
-import io.github.packagewjx.brandreportbackend.service.impl.CollectionService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public class StatisticsCounter implements Statistics {
                 .map(brand -> collectionService.getCombinedOneByTimeAndBrand(brand.getBrandId(), period, year, month, quarter))
                 .collect(Collectors.toList());
 
-        List<Index> childIndices = indexService.getAllChildIndices();
+        List<Index> childIndices = indexService.getAllLeafIndices();
         Map<String, BaseStatistics> statisticsMap = new ConcurrentHashMap<>(childIndices.size());
         // 布尔类型统计
         Set<Index> boolIndices = childIndices.parallelStream().filter(index -> Index.TYPE_BOOL.equals(index.getType())).collect(Collectors.toSet());

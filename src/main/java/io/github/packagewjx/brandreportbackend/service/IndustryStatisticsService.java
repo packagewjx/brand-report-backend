@@ -1,24 +1,19 @@
 package io.github.packagewjx.brandreportbackend.service;
 
 import io.github.packagewjx.brandreportbackend.domain.statistics.IndustryStatistics;
-import io.github.packagewjx.brandreportbackend.repository.statistics.IndustryStatisticsRepository;
-import io.github.packagewjx.brandreportbackend.service.impl.BaseServiceImpl;
-import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
- * @date 19-7-17
+ * @date 19-8-2
  **/
-@Service
-public class IndustryStatisticsService extends BaseServiceImpl<IndustryStatistics, String> {
-    IndustryStatisticsRepository repository;
-
-    protected IndustryStatisticsService(IndustryStatisticsRepository repository) {
-        super(repository);
-        this.repository = repository;
-    }
-
-    public Iterable<IndustryStatistics> getByIndustry(String industry) {
-        return repository.findByIndustry(industry);
-    }
+public interface IndustryStatisticsService extends BaseService<IndustryStatistics, String> {
+    /**
+     * 根据行业获取行业统计
+     *
+     * @param industry 行业
+     * @return 行业统计数据
+     */
+    List<IndustryStatistics> getByIndustry(String industry);
 }

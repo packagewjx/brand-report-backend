@@ -3,6 +3,7 @@ package io.github.packagewjx.brandreportbackend.service.impl;
 import io.github.packagewjx.brandreportbackend.domain.Constants;
 import io.github.packagewjx.brandreportbackend.domain.data.Collection;
 import io.github.packagewjx.brandreportbackend.repository.data.CollectionRepository;
+import io.github.packagewjx.brandreportbackend.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,25 +18,16 @@ import java.util.stream.Stream;
  * @date 19-7-16
  **/
 @Service
-public class CollectionService extends BaseServiceImpl<Collection, String> {
-    CollectionRepository repository;
+public class CollectionServiceImpl extends BaseServiceImpl<Collection, String> implements CollectionService {
+    private CollectionRepository repository;
 
     @Autowired
-    protected CollectionService(CollectionRepository repository) {
+    protected CollectionServiceImpl(CollectionRepository repository) {
         super(repository);
         this.repository = repository;
     }
 
-    /**
-     * 根据时间，获取数据，并合并为一个之后再返回。注意，返回的Collection没有ID
-     *
-     * @param brandId 品牌ID
-     * @param year    年份
-     * @param month   月份
-     * @param quarter 季度
-     * @param period  统计时长
-     * @return 单个Collection，集合了所有指定品牌的指定统计时长的数据
-     */
+    @Override
     public Collection getCombinedOneByTimeAndBrand(String brandId, String period, Integer year, Integer month, Integer quarter) {
         List<Collection> byBrandIdAndYear = repository.findByBrandIdAndYear(brandId, year);
 
