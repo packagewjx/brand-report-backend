@@ -1,4 +1,4 @@
-package io.github.packagewjx.brandreportbackend.domain.statistics;
+package io.github.packagewjx.brandreportbackend.domain.statistics.data;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

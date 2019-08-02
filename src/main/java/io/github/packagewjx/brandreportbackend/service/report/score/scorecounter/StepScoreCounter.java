@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
 import io.github.packagewjx.brandreportbackend.domain.Constants;
 import io.github.packagewjx.brandreportbackend.domain.meta.Index;
-import io.github.packagewjx.brandreportbackend.domain.statistics.BaseStatistics;
 import io.github.packagewjx.brandreportbackend.domain.statistics.IndustryStatistics;
-import io.github.packagewjx.brandreportbackend.domain.statistics.NumberStatistics;
+import io.github.packagewjx.brandreportbackend.domain.statistics.data.BaseStatistics;
+import io.github.packagewjx.brandreportbackend.domain.statistics.data.NumberStatistics;
 import io.github.packagewjx.brandreportbackend.service.report.score.ScoreAnnotations;
 import io.github.packagewjx.brandreportbackend.service.report.score.StepScoreDefinition;
 

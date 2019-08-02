@@ -1,5 +1,6 @@
 package io.github.packagewjx.brandreportbackend.domain.statistics;
 
+import io.github.packagewjx.brandreportbackend.domain.statistics.data.BaseStatistics;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
