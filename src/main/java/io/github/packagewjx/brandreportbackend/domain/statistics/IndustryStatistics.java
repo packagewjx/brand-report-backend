@@ -32,16 +32,10 @@ public class IndustryStatistics {
     private Integer year;
 
     /**
-     * 统计数据月份
+     * 年内统计时长序号
      */
-    @ApiModelProperty("统计数据月份")
-    private Integer month;
-
-    /**
-     * 统计数据季度
-     */
-    @ApiModelProperty("统计数据季度")
-    private Integer quarter;
+    @ApiModelProperty("年内统计时长序号")
+    private Integer periodTimeNumber;
 
     /**
      * 数据统计时长
@@ -93,20 +87,12 @@ public class IndustryStatistics {
         this.year = year;
     }
 
-    public Integer getMonth() {
-        return month;
+    public Integer getPeriodTimeNumber() {
+        return periodTimeNumber;
     }
 
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
-    public Integer getQuarter() {
-        return quarter;
-    }
-
-    public void setQuarter(Integer quarter) {
-        this.quarter = quarter;
+    public void setPeriodTimeNumber(Integer periodTimeNumber) {
+        this.periodTimeNumber = periodTimeNumber;
     }
 
     public Integer getTotal() {

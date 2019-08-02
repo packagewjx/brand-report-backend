@@ -22,7 +22,7 @@ public class IndexServiceTest extends BaseTest {
     @Test
     public void findChildIndices() {
         String testRootIndex = "spread-power";
-        List<Index> childIndices = indexService.getChildIndices(testRootIndex);
+        List<Index> childIndices = indexService.getLeafIndicesOfRoot(testRootIndex);
         Assert.assertNotEquals(0, childIndices.size());
         childIndices.forEach(index -> {
             Assert.assertNotEquals(Index.TYPE_INDICES, index.getType());

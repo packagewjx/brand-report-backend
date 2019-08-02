@@ -57,6 +57,7 @@ public class StatisticsCounter implements Statistics {
         IndustryStatistics stat = new IndustryStatistics();
         stat.setYear(year);
         stat.setPeriod(period);
+        stat.setPeriodTimeNumber(periodTimeNumber);
         stat.setIndustry(industry);
 
         List<Brand> industryBrand = brandRepository.findByIndustry(industry);

@@ -15,6 +15,9 @@ import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter
 import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.IndexScoreCounter;
 import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.ScoreCounterFactory;
 import io.github.packagewjx.brandreportbackend.service.statistics.StatisticsCounter;
+import io.github.packagewjx.brandreportbackend.utils.LogUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -28,6 +31,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ScoreDataImporter implements BrandReportDataImporter {
+    private final static Logger logger = LoggerFactory.getLogger(ScoreDataImporter.class);
+
     private final IndustryStatisticsService industryStatisticsService;
     private final BrandService brandService;
     private final StatisticsCounter statisticsCounter;
@@ -41,23 +46,33 @@ public class ScoreDataImporter implements BrandReportDataImporter {
     private Map<Index, Set<Index>> countMap;
 
     public ScoreDataImporter(IndustryStatisticsService industryStatisticsService, BrandService brandService, StatisticsCounter statisticsCounter, IndexService indexService) {
+        logger.debug("构建ScoreDataImporter中");
         this.industryStatisticsService = industryStatisticsService;
         this.brandService = brandService;
         this.statisticsCounter = statisticsCounter;
 
+        logger.debug("获取所有指标");
         // 获取所有指标
         Collection<Index> indices = (Collection<Index>) indexService.getAll();
 
+        logger.debug("提取出用于保存分数的指标");
         // 获取保存分数的指标
         Set<Index> scoreIndices = indices.parallelStream().filter(index -> index.getAnnotations() != null)
                 .filter(index -> index.getAnnotations().containsKey(ScoreAnnotations.ANNOTATION_KEY_SCORE_INDEX_FOR))
                 .collect(Collectors.toSet());
+        logger.debug("共{}个分数指标", scoreIndices.size());
+        scoreIndices.forEach(index -> {
+            logger.trace("计分指标{}，用于保存{}的叶子指标的分数", index.getIndexId(), index.getAnnotations().get(ScoreAnnotations.ANNOTATION_KEY_SCORE_INDEX_FOR));
+        });
+
+        logger.debug("根据每个计分指标所汇总的子指标表");
         countMap = new ConcurrentHashMap<>();
         scoreIndices.parallelStream().forEach(index -> {
             Set<Index> childIndices = getChildIndices(index.getAnnotations().get(ScoreAnnotations.ANNOTATION_KEY_SCORE_INDEX_FOR), indices);
             countMap.put(index, childIndices);
         });
 
+        logger.debug("构建分数计算类中");
         // 初始化计算类
         counters = new HashMap<>(indices.size());
         indices.forEach(index -> counters.put(index.getIndexId(), ScoreCounterFactory.instance.build(index)));
@@ -73,6 +88,11 @@ public class ScoreDataImporter implements BrandReportDataImporter {
      * @return 行业统计数据，保证非空
      */
     private IndustryStatistics getIndustryStatisticsAndTime(String industry, String period, Integer year, Integer periodTimeNumber) {
+        if (period == null) {
+            logger.error("period不能为空");
+            throw new IllegalArgumentException("period不能为空");
+        }
+        logger.info("获取行业{}在{}的统计数据", industry, LogUtils.getLogTime(year, period, periodTimeNumber));
         Collection<IndustryStatistics> byIndustry = industryStatisticsService.getByIndustry(industry);
         IndustryStatistics ret;
         if (Constants.PERIOD_ANNUAL.equals(period)) {
@@ -80,31 +100,40 @@ public class ScoreDataImporter implements BrandReportDataImporter {
                     .filter(industryStatistics -> year.equals(industryStatistics.getYear()))
                     .findAny().orElse(null);
         } else {
-            if (periodTimeNumber == null || period == null) {
-                throw new IllegalArgumentException("periodTimeNumber与period不能为空");
+            if (periodTimeNumber == null) {
+                logger.error("periodTimeNumber不能为空");
+                throw new IllegalArgumentException("periodTimeNumber不能为空");
             }
             ret = byIndustry.stream()
                     .filter(industryStatistics -> period.equals(industryStatistics.getPeriod()))
-                    .filter(industryStatistics -> periodTimeNumber.equals(industryStatistics.getMonth()) && year.equals(industryStatistics.getYear()))
+                    .filter(industryStatistics -> periodTimeNumber.equals(industryStatistics.getPeriodTimeNumber()) && year.equals(industryStatistics.getYear()))
                     .findAny().orElse(null);
-
         }
 
+        if (ret == null) {
+            logger.info("目前没有保存{}在{}的统计数据，开始计算", industry, LogUtils.getLogTime(year, period, periodTimeNumber));
+        }
         // 若没有保存，则返回计算值
         return ret != null ? ret : statisticsCounter.count(industry, year, period, periodTimeNumber);
     }
 
     @Override
     public BrandReport importData(BrandReport brandReport) {
+        logger.info("计算品牌ID{}在{}品牌报告的分数", brandReport.getBrandId(),
+                LogUtils.getLogTime(brandReport.getYear(), brandReport.getPeriod(), brandReport.getPeriodTimeNumber()));
         Optional<Brand> oBrand = brandService.getById(brandReport.getBrandId());
         if (!oBrand.isPresent()) {
+            logger.error("不存在品牌Id{}的品牌", brandReport.getBrandId());
             throw new EntityNotExistException("不存在BrandId为" + brandReport.getBrandId() + "的品牌");
         }
         if (brandReport.getYear() == null) {
+            logger.error("年份不能为空");
             throw new IllegalArgumentException("year不能为空");
         }
 
         String industry = oBrand.get().getIndustry();
+        logger.info("获取行业{}在{}的统计结果", industry,
+                LogUtils.getLogTime(brandReport.getYear(), brandReport.getPeriod(), brandReport.getPeriodTimeNumber()));
         IndustryStatistics industryStatistics = getIndustryStatisticsAndTime(industry, brandReport.getPeriod(),
                 brandReport.getYear(), brandReport.getPeriodTimeNumber());
         Context ctx = new Context();
@@ -116,9 +145,16 @@ public class ScoreDataImporter implements BrandReportDataImporter {
             Double sum = indices.stream()
                     .map(index -> {
                         // 这里不应该再产生NPE，因为对所有的指标均进行了加载
-                        return counters.get(index.getIndexId()).countScore(brandReport, ctx);
+                        double score = counters.get(index.getIndexId()).countScore(brandReport, ctx);
+                        logger.trace("品牌ID{}在{}的{}分数为{}", brandReport.getBrandId(),
+                                LogUtils.getLogTime(brandReport.getYear(), brandReport.getPeriod(), brandReport.getPeriodTimeNumber()),
+                                index.getIndexId(), score);
+                        return score;
                     })
                     .reduce(Double::sum).orElse(0.0);
+            logger.debug("品牌ID{}在{}的{}分数为{}", brandReport.getBrandId(),
+                    LogUtils.getLogTime(brandReport.getYear(), brandReport.getPeriod(), brandReport.getPeriodTimeNumber()),
+                    entry.getKey().getIndexId(), sum);
             brandReport.getData().put(entry.getKey().getIndexId(), sum);
         });
 

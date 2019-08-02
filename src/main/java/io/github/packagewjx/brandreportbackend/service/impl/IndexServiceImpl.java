@@ -3,6 +3,8 @@ package io.github.packagewjx.brandreportbackend.service.impl;
 import io.github.packagewjx.brandreportbackend.domain.meta.Index;
 import io.github.packagewjx.brandreportbackend.repository.meta.IndexRepository;
 import io.github.packagewjx.brandreportbackend.service.IndexService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
  **/
 @Service
 public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements IndexService {
+    private static final Logger logger = LoggerFactory.getLogger(IndexServiceImpl.class);
     private IndexRepository indexRepository;
 
     protected IndexServiceImpl(IndexRepository repository) {
@@ -31,12 +34,15 @@ public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements 
      * @return 叶子Index
      */
     @Override
-    public List<Index> getChildIndices(String rootIndexId) {
+    public List<Index> getLeafIndicesOfRoot(String rootIndexId) {
+        logger.info("获取根指标{}的所有叶子指标中", rootIndexId);
         if (rootIndexId == null || "".equals(rootIndexId) || !this.existById(rootIndexId)) {
             return Collections.emptyList();
         }
         List<Index> result = new ArrayList<>();
+        logger.debug("获取所有指标中");
         Collection<Index> all = (Collection<Index>) this.getAll();
+        logger.debug("提取{}的叶子指标中", rootIndexId);
         List<String> queue = new ArrayList<>();
         queue.add(rootIndexId);
         while (queue.size() > 0) {
@@ -58,12 +64,14 @@ public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements 
 
     @Override
     public List<Index> getAllLeafIndices() {
+        logger.info("获取所有叶子节点指标");
         return ((Collection<Index>) this.getAll()).parallelStream()
                 .filter(index -> !Index.TYPE_INDICES.equals(index.getType())).collect(Collectors.toList());
     }
 
     @Override
     public List<Index> getAllByType(String type) {
+        logger.info("获取类型为{}的指标", type);
         return indexRepository.findByType(type);
     }
 }

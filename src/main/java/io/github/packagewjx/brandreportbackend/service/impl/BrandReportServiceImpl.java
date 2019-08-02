@@ -7,6 +7,9 @@ import io.github.packagewjx.brandreportbackend.service.report.BrandReportDataImp
 import io.github.packagewjx.brandreportbackend.service.report.CollectionDataImporter;
 import io.github.packagewjx.brandreportbackend.service.report.CompositeDataImporter;
 import io.github.packagewjx.brandreportbackend.service.report.score.ScoreDataImporter;
+import io.github.packagewjx.brandreportbackend.utils.LogUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +22,8 @@ import java.util.List;
  **/
 @Service
 public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String> implements BrandReportService {
+    private final static Logger logger = LoggerFactory.getLogger(BrandReportServiceImpl.class);
+
     private final CompositeDataImporter dataImporter;
 
     public BrandReportServiceImpl(BrandReportRepository repository,
@@ -32,6 +37,8 @@ public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String>
 
     @Override
     public BrandReport buildReport(String brandId, int year, String period, Integer periodTimeNumber) {
+        logger.info("构建品牌Id{}在{}的品牌报告", brandId, LogUtils.getLogTime(year, period, periodTimeNumber));
+
         BrandReport report = new BrandReport();
         report.setBrandId(brandId);
         report.setYear(year);
@@ -40,6 +47,7 @@ public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String>
         report.setPeriodTimeNumber(periodTimeNumber);
 
         // 导入数据
+        logger.info("开始给品牌ID{}的品牌报告导入数据", brandId);
         dataImporter.importData(report);
         return report;
     }

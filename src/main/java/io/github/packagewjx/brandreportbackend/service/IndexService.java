@@ -15,7 +15,7 @@ public interface IndexService extends BaseService<Index, String> {
      * @param rootIndexId 根IndexId
      * @return 叶子Index
      */
-    List<Index> getChildIndices(String rootIndexId);
+    List<Index> getLeafIndicesOfRoot(String rootIndexId);
 
     /**
      * 获取指标树中的叶子指标
