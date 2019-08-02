@@ -1,13 +1,13 @@
 package io.github.packagewjx.brandreportbackend.service.report.score;
 
 
-import io.github.packagewjx.brandreportbackend.BrandService;
 import io.github.packagewjx.brandreportbackend.domain.Brand;
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
 import io.github.packagewjx.brandreportbackend.domain.Constants;
 import io.github.packagewjx.brandreportbackend.domain.meta.Index;
 import io.github.packagewjx.brandreportbackend.domain.statistics.IndustryStatistics;
 import io.github.packagewjx.brandreportbackend.exception.EntityNotExistException;
+import io.github.packagewjx.brandreportbackend.service.BrandService;
 import io.github.packagewjx.brandreportbackend.service.IndexService;
 import io.github.packagewjx.brandreportbackend.service.IndustryStatisticsService;
 import io.github.packagewjx.brandreportbackend.service.report.BrandReportDataImporter;
