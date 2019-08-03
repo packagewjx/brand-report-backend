@@ -36,7 +36,7 @@ public abstract class BaseController<T, ID> {
     @ApiResponses({
             @ApiResponse(code = 201, message = "创建成功")
     })
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<T> insert(@RequestBody @ApiParam(required = true, value = "新的实体") T entity) {
         return new ResponseEntity<>(service.save(entity), HttpStatus.CREATED);
     }
@@ -76,7 +76,7 @@ public abstract class BaseController<T, ID> {
     @ApiResponses({
             @ApiResponse(code = 200, message = "获取成功")
     })
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<List<T>> getAll() {
         return new ResponseEntity<>(new ArrayList<>(((Collection<T>) service.getAll())), HttpStatus.OK);
     }
@@ -85,7 +85,7 @@ public abstract class BaseController<T, ID> {
     @ApiResponses({
             @ApiResponse(code = 200, message = "删除成功")
     })
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
     public ResponseEntity<T> delete(@RequestBody @ApiParam(value = "需要删除的实体，比较重要的是要有ID") T entity) {
         service.delete(entity);
         return new ResponseEntity<>(HttpStatus.OK);
