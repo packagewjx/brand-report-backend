@@ -105,12 +105,17 @@ public abstract class BaseController<T, ID> {
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<String> illegalArgument(IllegalArgumentException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Exception> illegalArgument(IllegalArgumentException e) {
+        return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({EntityNotExistException.class})
-    public ResponseEntity<String> entityNotFound(EntityNotExistException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<Exception> entityNotFound(EntityNotExistException e) {
+        return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Exception> exception(Exception e) {
+        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

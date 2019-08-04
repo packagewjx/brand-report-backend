@@ -89,6 +89,10 @@ public class StatisticsCounter implements Statistics {
             Map<Object, Integer> counts = new HashMap<>(10);
             collections.forEach(collection -> {
                 Object o = collection.getData().get(index.getIndexId());
+                // 防止为空时，无法转换为json
+                if (o == null) {
+                    o = "null";
+                }
                 Integer count = counts.getOrDefault(o, 0);
                 counts.put(o, count + 1);
             });
