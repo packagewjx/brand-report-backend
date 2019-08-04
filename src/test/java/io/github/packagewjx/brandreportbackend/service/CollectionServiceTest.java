@@ -1,6 +1,7 @@
 package io.github.packagewjx.brandreportbackend.service;
 
 import io.github.packagewjx.brandreportbackend.BaseTest;
+import io.github.packagewjx.brandreportbackend.domain.Brand;
 import io.github.packagewjx.brandreportbackend.domain.Constants;
 import io.github.packagewjx.brandreportbackend.domain.data.Collection;
 import org.junit.Assert;
@@ -20,6 +21,9 @@ import java.util.stream.Collectors;
 public class CollectionServiceTest extends BaseTest {
     @Autowired
     CollectionService service;
+
+    @Autowired
+    BrandService brandService;
 
     @Test
     public void baseMultipleMethodTest() {
@@ -80,6 +84,18 @@ public class CollectionServiceTest extends BaseTest {
         service.deleteAll(retCol);
         Assert.assertFalse(service.getById(ids[0]).isPresent());
         Assert.assertFalse(service.getById(ids[1]).isPresent());
+    }
+
+    @Test
+    public void getAllBrandCollection() {
+        Iterable<Brand> all = brandService.getAll();
+        all.forEach(brand -> {
+            Collection cl = service.getCombinedOneByTimeAndBrand(brand.getBrandId(), Constants.PERIOD_ANNUAL, 2018, null);
+            Assert.assertNotNull(cl);
+            Assert.assertEquals(cl.getYear(), cl.getYear());
+            Assert.assertEquals(Constants.PERIOD_ANNUAL, cl.getPeriod());
+            cl.getData().forEach((s, o) -> Assert.assertNotNull(o));
+        });
     }
 
     @Test

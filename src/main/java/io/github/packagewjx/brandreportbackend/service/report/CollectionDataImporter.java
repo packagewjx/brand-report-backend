@@ -40,6 +40,12 @@ public class CollectionDataImporter implements BrandReportDataImporter {
         Collection clt = collectionService.getCombinedOneByTimeAndBrand(brandReport.getBrandId(), brandReport.getPeriod(),
                 brandReport.getYear(), brandReport.getPeriodTimeNumber());
         logger.debug("导入数据到品牌ID{}的品牌报告中", brandReport.getBrandId());
+        // 删除值为null的，以防出现NPE
+        for (String key : clt.getData().keySet()) {
+            if (clt.getData().get(key) == null) {
+                clt.getData().remove(key);
+            }
+        }
         brandReport.getData().putAll(clt.getData());
         return brandReport;
     }
