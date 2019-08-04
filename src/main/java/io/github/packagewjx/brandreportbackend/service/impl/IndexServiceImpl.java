@@ -1,6 +1,7 @@
 package io.github.packagewjx.brandreportbackend.service.impl;
 
 import io.github.packagewjx.brandreportbackend.domain.meta.Index;
+import io.github.packagewjx.brandreportbackend.exception.EntityNotExistException;
 import io.github.packagewjx.brandreportbackend.repository.meta.IndexRepository;
 import io.github.packagewjx.brandreportbackend.service.IndexService;
 import org.slf4j.Logger;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,8 +36,12 @@ public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements 
     @Override
     public List<Index> getLeafIndicesOfRoot(String rootIndexId) {
         logger.info("获取根指标{}的所有叶子指标中", rootIndexId);
-        if (rootIndexId == null || "".equals(rootIndexId) || !this.existById(rootIndexId)) {
-            return Collections.emptyList();
+        if (rootIndexId == null || "".equals(rootIndexId)) {
+            // 若是空的话，则返回所有的
+            return getAllLeafIndices();
+        }
+        if (!this.existById(rootIndexId)) {
+            throw new EntityNotExistException("不存在ID为" + rootIndexId + "的指标");
         }
         List<Index> result = new ArrayList<>();
         logger.debug("获取所有指标中");

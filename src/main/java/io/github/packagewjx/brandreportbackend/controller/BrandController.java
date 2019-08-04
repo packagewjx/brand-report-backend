@@ -2,6 +2,7 @@ package io.github.packagewjx.brandreportbackend.controller;
 
 import io.github.packagewjx.brandreportbackend.domain.Brand;
 import io.github.packagewjx.brandreportbackend.service.BaseService;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
  **/
 @RestController
 @RequestMapping("brand")
+@Api(tags = {"品牌访问接口"})
 public class BrandController extends BaseController<Brand, String> {
     protected BrandController(BaseService<Brand, String> service) {
         super(service);
