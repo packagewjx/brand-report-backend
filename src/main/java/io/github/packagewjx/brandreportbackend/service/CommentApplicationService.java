@@ -23,7 +23,7 @@ public interface CommentApplicationService extends BaseService<CommentApplicatio
      * @param applicantId 申请人Id
      * @return 该申请人申请的报告
      */
-    Collection<CommentApplication> geyByApplicantId(String applicantId);
+    Collection<CommentApplication> getByApplicantId(String applicantId);
 
     /**
      * 根据专家用户ID获取其所有需要填写报告的申请
