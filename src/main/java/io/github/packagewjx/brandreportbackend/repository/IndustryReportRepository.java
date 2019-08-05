@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface IndustryReportRepository extends MongoRepository<IndustryReport, String> {
-    List<IndustryReport> findByIndustryId(String industryid);
+    List<IndustryReport> findByIndustryReportId(String industryReportId);
 
     List<IndustryReport> findByIndustry(String industry);
 
@@ -18,21 +18,17 @@ public interface IndustryReportRepository extends MongoRepository<IndustryReport
     @Query("{'year':{'$gt':?0, '$lt':?1}}")
     List<IndustryReport> findByYearBetween(Integer from, Integer to);
 
-    List<IndustryReport> findByMonth(Integer month);
-
-    List<IndustryReport> findByQuarter(Integer quarter);
+    List<IndustryReport> findByPeriodTimeNumber(Integer periodTimeNumber);
 
     List<IndustryReport> findByPeriod(String period);
 
-    void deleteByIndustryId(String industryid);
+    void deleteByIndustryReportId(String industryReportId);
 
     void deleteByIndustry(String industry);
 
     void deleteByYear(Integer year);
 
-    void deleteByMonth(Integer month);
-
-    void deleteByQuarter(Integer quarter);
+    void deleteByPeriodTimeNumber(Integer periodTimeNumber);
 
     void deleteByPeriod(String period);
 }

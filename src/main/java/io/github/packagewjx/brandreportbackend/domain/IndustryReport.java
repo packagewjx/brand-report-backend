@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -17,7 +18,7 @@ public class IndustryReport {
      */
     @Id
     @ApiModelProperty
-    private String industryId;
+    private String industryReportId;
 
     /**
      * 行业名
@@ -32,16 +33,10 @@ public class IndustryReport {
     private Integer year;
 
     /**
-     * 报告月份
+     * 年内报告统计时间序号
      */
-    @ApiModelProperty(value = "报告月份", allowableValues = "[1,12]")
-    private Integer month;
-
-    /**
-     * 报告季度
-     */
-    @ApiModelProperty(value = "报告季度", allowableValues = "[1,4]")
-    private Integer quarter;
+    @ApiModelProperty(value = "年内报告统计时间序号")
+    private Integer periodTimeNumber;
 
     /**
      * 报告统计时长
@@ -66,13 +61,26 @@ public class IndustryReport {
      */
     @ApiModelProperty("行业统计数据")
     private IndustryStatistics stat;
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty("创建时间")
+    private Date createTime;
 
-    public String getIndustryId() {
-        return industryId;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setIndustryId(String industryId) {
-        this.industryId = industryId;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getIndustryReportId() {
+        return industryReportId;
+    }
+
+    public void setIndustryReportId(String industryReportId) {
+        this.industryReportId = industryReportId;
     }
 
     public String getIndustry() {
@@ -91,20 +99,12 @@ public class IndustryReport {
         this.year = year;
     }
 
-    public Integer getMonth() {
-        return month;
+    public Integer getPeriodTimeNumber() {
+        return periodTimeNumber;
     }
 
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
-    public Integer getQuarter() {
-        return quarter;
-    }
-
-    public void setQuarter(Integer quarter) {
-        this.quarter = quarter;
+    public void setPeriodTimeNumber(Integer periodTimeNumber) {
+        this.periodTimeNumber = periodTimeNumber;
     }
 
     public String getPeriod() {
