@@ -9,14 +9,14 @@ import java.util.List;
 
 @Repository
 public interface BrandReportCommentRepository extends MongoRepository<BrandReportComment, String> {
-    List<BrandReportComment> findByReportId(String reportid);
+    List<BrandReportComment> findByBrandReportId(String brandReportId);
 
     List<BrandReportComment> findByUserId(String userid);
 
     @Query(value = "{'reportId':?0, 'userId':?1}")
-    List<BrandReportComment> findByReportIdAndUserId(String reportid, String userid);
+    List<BrandReportComment> findByBrandReportIdAndUserId(String brandReportId, String userid);
 
-    void deleteByReportId(String reportid);
+    void deleteByBrandReportId(String brandReportId);
 
     void deleteByUserId(String userid);
 }

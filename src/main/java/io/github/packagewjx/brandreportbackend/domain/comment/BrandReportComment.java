@@ -13,15 +13,22 @@ import java.util.Map;
 @ApiModel(description = "品牌报告专家评价")
 public class BrandReportComment {
     /**
-     * 所属报告的Id
+     * 评价对象ID
      */
     @Id
+    @ApiModelProperty("评价对象ID")
+    private String commentId;
+
+    /**
+     * 所属报告的Id
+     */
     @ApiModelProperty("所属报告的Id")
-    private String reportId;
+    private String brandReportId;
 
     /**
      * 编写评价的用户Id
      */
+    @ApiModelProperty("编写评价的用户ID")
     private String userId;
 
     /**
@@ -36,12 +43,50 @@ public class BrandReportComment {
     @ApiModelProperty("对具体数据的评价")
     private Map<String, String> dataComment;
 
-    public String getReportId() {
-        return reportId;
+    public String getCommentId() {
+        return commentId;
     }
 
-    public void setReportId(String reportId) {
-        this.reportId = reportId;
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        BrandReportComment that = (BrandReportComment) o;
+
+        return commentId.equals(that.commentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return commentId.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "BrandReportComment{" +
+                "commentId='" + commentId + '\'' +
+                ", brandReportId='" + brandReportId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", overallComment='" + overallComment + '\'' +
+                ", dataComment=" + dataComment +
+                '}';
+    }
+
+    public String getBrandReportId() {
+        return brandReportId;
+    }
+
+    public void setBrandReportId(String brandReportId) {
+        this.brandReportId = brandReportId;
     }
 
     public String getUserId() {
