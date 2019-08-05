@@ -138,6 +138,7 @@ public class BrandReportRepositoryTest extends BaseTest {
     @Test
     public void testDeleteById() {
         brandReportRepository.deleteById("22");
+        brandReportRepository.deleteById("11");
     }
 
     @Test

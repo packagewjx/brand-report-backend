@@ -38,6 +38,8 @@ public class BrandRepositoryTest extends BaseTest {
     @Test
     public void testDelete() {
         brandRepository.deleteById("1");
+        brandRepository.deleteById("3");
+        brandRepository.deleteById("4");
     }
 
     @Test

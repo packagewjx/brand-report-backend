@@ -90,6 +90,7 @@ public class CollectionRepositoryTest extends BaseTest {
     @Test
     public void testDeleteByBrandId() {
         collectionRepository.deleteByBrandId("meidi");
+        collectionRepository.deleteByBrandId("haier");
     }
 
 }
