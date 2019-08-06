@@ -33,6 +33,7 @@ public class Collection {
      * <p>
      * 若统计时长是月份，则总共12个统计时间，取值范围为[1,12]。若是季度，则取值范围为[1,4]。若是年份，则忽略本字段。
      */
+    @ApiModelProperty("年内统计时间序号")
     private Integer periodTimeNumber;
 
     /**
