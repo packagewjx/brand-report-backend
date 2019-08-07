@@ -17,7 +17,7 @@ import java.util.Optional;
  * @date 19-8-2
  **/
 public abstract class BaseController<T, ID> {
-    private BaseService<T, ID> service;
+    private BaseService<T, ID> service;     //依赖注入
 
     protected BaseController(BaseService<T, ID> service) {
         this.service = service;
