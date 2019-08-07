@@ -96,7 +96,7 @@ public abstract class BaseController<T, ID> {
             @ApiResponse(code = 200, message = "删除成功")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(type = "path", value = "要删除的实体ID", name = "id")
+            @ApiImplicitParam(type = "path", value = "要删除的实体ID", name = "id", required = true)
     })
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<T> deleteById(@PathVariable("id") ID id) {
