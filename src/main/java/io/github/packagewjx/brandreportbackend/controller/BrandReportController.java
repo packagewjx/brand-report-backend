@@ -42,9 +42,9 @@ public class BrandReportController extends BaseController<BrandReport, String> {
             (@RequestParam("brand-id") @ApiParam(name = "brand-id", value = "品牌ID", required = true) String brandId,
              @RequestParam @ApiParam(value = "年份", required = true) Integer year,
              @RequestParam(required = false, defaultValue = "annual")
-             @ApiParam(value = "统计时长", defaultValue = "annual", allowableValues = "[annual, monthly, quarterly]") String period,
+             @ApiParam(value = "统计时长", defaultValue = "annual", allowableValues = "annual, monthly, quarterly") String period,
              @RequestParam(name = "period-name-number", required = false, defaultValue = "1")
-             @ApiParam(name = "period-name-number", value = "年内统计时长序号", defaultValue = "1", allowableValues = "range[1-12]") Integer periodTimeNumber) {
+             @ApiParam(name = "period-name-number", value = "年内统计时长序号", defaultValue = "1", allowableValues = "range[1,12]") Integer periodTimeNumber) {
         return new ResponseEntity<>(service.buildReport(brandId, year, period, periodTimeNumber), HttpStatus.OK);
     }
 
