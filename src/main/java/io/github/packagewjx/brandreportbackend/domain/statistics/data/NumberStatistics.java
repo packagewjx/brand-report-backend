@@ -1,7 +1,9 @@
 package io.github.packagewjx.brandreportbackend.domain.statistics.data;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(description = "数字类型指标统计数据", parent = BaseStatistics.class)
 public class NumberStatistics extends BaseStatistics {
     /**
      * 总值
