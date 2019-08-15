@@ -2,7 +2,7 @@ package io.github.packagewjx.brandreportbackend.service.impl;
 
 import io.github.packagewjx.brandreportbackend.domain.Brand;
 import io.github.packagewjx.brandreportbackend.service.BrandService;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class BrandServiceImpl extends BaseServiceImpl<Brand, String> implements BrandService {
-    protected BrandServiceImpl(CrudRepository<Brand, String> repository) {
+    protected BrandServiceImpl(MongoRepository<Brand, String> repository) {
         super(repository);
     }
 }

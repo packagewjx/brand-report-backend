@@ -1,7 +1,8 @@
 package io.github.packagewjx.brandreportbackend.service.impl;
 
 import io.github.packagewjx.brandreportbackend.service.BaseService;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
@@ -12,9 +13,9 @@ import java.util.Optional;
  * 基服务的基本实现
  **/
 public class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
-    private CrudRepository<T, ID> repository;
+    private MongoRepository<T, ID> repository;
 
-    protected BaseServiceImpl(CrudRepository<T, ID> repository) {
+    protected BaseServiceImpl(MongoRepository<T, ID> repository) {
         this.repository = repository;
     }
 
@@ -51,6 +52,11 @@ public class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
     @Override
     public Iterable<T> getAllById(Iterable<ID> ids) {
         return repository.findAllById(ids);
+    }
+
+    @Override
+    public Iterable<T> getAllByExample(T example) {
+        return repository.findAll(Example.of(example));
     }
 
     @Override

@@ -65,6 +65,14 @@ public interface BaseService<T, ID> {
     Iterable<T> getAllById(Iterable<ID> ids);
 
     /**
+     * 根据example中非null的字段，查询符合的所有实体
+     *
+     * @param example 查询条件
+     * @return 符合example条件的所有实体
+     */
+    Iterable<T> getAllByExample(T example);
+
+    /**
      * 查看是否存在
      *
      * @param id ID

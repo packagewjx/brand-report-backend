@@ -17,7 +17,7 @@ import java.util.Optional;
  * @date 19-8-2
  **/
 public abstract class BaseController<T, ID> {
-    private BaseService<T, ID> service;     //依赖注入
+    private BaseService<T, ID> service;
 
     protected BaseController(BaseService<T, ID> service) {
         this.service = service;
@@ -102,6 +102,16 @@ public abstract class BaseController<T, ID> {
     public ResponseEntity<T> deleteById(@PathVariable("id") ID id) {
         service.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "将传入的对象转变为查询条件，查询符合的所有实体对象", httpMethod = "GET")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功")
+    })
+    @RequestMapping(value = "", method = RequestMethod.GET, params = {"action=query"})
+    @ApiParam(name = "action", allowableValues = "query", required = true, value = "查询API的操作参数")
+    public ResponseEntity<List<T>> getAllByExample(@RequestBody @ApiParam(value = "查询的条件，以实体对象方式给出", required = true) T example) {
+        return new ResponseEntity<>(new ArrayList<>(((Collection<T>) service.getAllByExample(example))), HttpStatus.OK);
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
