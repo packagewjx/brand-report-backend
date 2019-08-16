@@ -2,21 +2,11 @@ package io.github.packagewjx.brandreportbackend.service;
 
 import io.github.packagewjx.brandreportbackend.domain.IndustryReport;
 
-import java.util.Collection;
-
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-8-5
  **/
 public interface IndustryReportService extends BaseService<IndustryReport, String> {
-    /**
-     * 获取指定行业的报告
-     *
-     * @param industry 行业名
-     * @return 行业
-     */
-    Collection<IndustryReport> getByIndustry(String industry);
-
     /**
      * 构建行业报告。本操作不会保存新报告也不会获取已有行业报告。
      *

@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +26,6 @@ public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String>
 
     private final CompositeDataImporter dataImporter;
 
-    private final BrandReportRepository reportRepository;
-
     public BrandReportServiceImpl(BrandReportRepository repository,
                                   ScoreDataImporter scoreDataImporter, CollectionDataImporter collectionDataImporter) {
         super(repository);
@@ -36,12 +33,6 @@ public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String>
         importers.add(collectionDataImporter);
         importers.add(scoreDataImporter);
         dataImporter = new CompositeDataImporter(importers);
-        reportRepository = repository;
-    }
-
-    @Override
-    public Collection<BrandReport> getByBrandId(String brandId) {
-        return reportRepository.findByBrandId(brandId);
     }
 
     @Override

@@ -36,12 +36,17 @@ public class IndustryStatisticsControllerTest extends BaseTest {
         IndustryStatistics statistics = service.countStatistics("家电", 2018, Constants.PERIOD_ANNUAL, 1);
         ObjectMapper mapper = new ObjectMapper();
         String s = mapper.writeValueAsString(statistics);
-        System.out.println(s);
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/industry-statistics")
                 .content(s)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andDo(mvcResult -> {
+                    // 删除
+                    IndustryStatistics stat = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), IndustryStatistics.class);
+                    mockMvc.perform(MockMvcRequestBuilders.delete("/industry-statistics/" + stat.getStatId()))
+                            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                });
     }
 }

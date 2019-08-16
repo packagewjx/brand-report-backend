@@ -44,11 +44,6 @@ public class IndustryReportServiceImpl extends BaseServiceImpl<IndustryReport, S
     }
 
     @Override
-    public Collection<IndustryReport> getByIndustry(String industry) {
-        return reportRepository.findByIndustry(industry);
-    }
-
-    @Override
     public IndustryReport buildIndustryReport(String industry, Integer year, @Nullable String period, @Nullable Integer periodTimeNumber) {
         if (industry == null || "".equals(industry) || year == null) {
             throw new IllegalArgumentException("industry和year不能为空");
@@ -80,7 +75,9 @@ public class IndustryReportServiceImpl extends BaseServiceImpl<IndustryReport, S
         }
 
         logger.info("获取行业统计数据");
-        List<IndustryStatistics> statByIndustry = industryStatisticsService.getByIndustry(industry);
+        IndustryStatistics queryExample = new IndustryStatistics();
+        queryExample.setIndustry(industry);
+        Collection<IndustryStatistics> statByIndustry = ((Collection<IndustryStatistics>) industryStatisticsService.getAllByExample(queryExample));
         // 临时变量
         String finalPeriod = period;
         Integer finalPeriodTimeNumber = periodTimeNumber;
@@ -94,7 +91,9 @@ public class IndustryReportServiceImpl extends BaseServiceImpl<IndustryReport, S
 
         industryBrands.parallelStream().forEach(brand -> {
             logger.info("获取{}品牌在{}的品牌报告", brand.getBrandName(), LogUtils.getLogTime(year, finalPeriod, finalPeriodTimeNumber));
-            Collection<BrandReport> byBrandId = brandReportService.getByBrandId(brand.getBrandId());
+            BrandReport brandExample = new BrandReport();
+            brandExample.setBrandId(brand.getBrandId());
+            Collection<BrandReport> byBrandId = ((Collection<BrandReport>) brandReportService.getAllByExample(brandExample));
             // 目前仅获取其中一份报告，而不管优先级
             Optional<BrandReport> any1 = byBrandId.stream().filter(brandReport -> year.equals(brandReport.getYear()))
                     .filter(brandReport -> finalPeriod.equals(brandReport.getPeriod()))

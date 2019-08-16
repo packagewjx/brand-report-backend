@@ -2,21 +2,11 @@ package io.github.packagewjx.brandreportbackend.service;
 
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
 
-import java.util.Collection;
-
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-8-2
  **/
 public interface BrandReportService extends BaseService<BrandReport, String> {
-    /**
-     * 根据品牌ID获取品牌报告
-     *
-     * @param brandId 品牌ID
-     * @return 所有品牌报告
-     */
-    Collection<BrandReport> getByBrandId(String brandId);
-
     /**
      * 构建新的报告，根据brandId和时间参数获取数据，执行必要的计算，并返回
      * <p>

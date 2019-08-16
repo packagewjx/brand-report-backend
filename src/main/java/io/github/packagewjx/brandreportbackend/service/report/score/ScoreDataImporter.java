@@ -61,9 +61,8 @@ public class ScoreDataImporter implements BrandReportDataImporter {
                 .filter(index -> index.getAnnotations().containsKey(ScoreAnnotations.ANNOTATION_KEY_SCORE_INDEX_FOR))
                 .collect(Collectors.toSet());
         logger.debug("共{}个分数指标", scoreIndices.size());
-        scoreIndices.forEach(index -> {
-            logger.trace("计分指标{}，用于保存{}的叶子指标的分数", index.getIndexId(), index.getAnnotations().get(ScoreAnnotations.ANNOTATION_KEY_SCORE_INDEX_FOR));
-        });
+        scoreIndices.forEach(index -> logger.trace("计分指标{}，用于保存{}的叶子指标的分数",
+                index.getIndexId(), index.getAnnotations().get(ScoreAnnotations.ANNOTATION_KEY_SCORE_INDEX_FOR)));
 
         logger.debug("根据每个计分指标所汇总的子指标表");
         countMap = new ConcurrentHashMap<>();
@@ -93,7 +92,9 @@ public class ScoreDataImporter implements BrandReportDataImporter {
             throw new IllegalArgumentException("period不能为空");
         }
         logger.info("获取行业{}在{}的统计数据", industry, LogUtils.getLogTime(year, period, periodTimeNumber));
-        Collection<IndustryStatistics> byIndustry = industryStatisticsService.getByIndustry(industry);
+        IndustryStatistics example = new IndustryStatistics();
+        example.setIndustry(industry);
+        Collection<IndustryStatistics> byIndustry = ((Collection<IndustryStatistics>) industryStatisticsService.getAllByExample(example));
         IndustryStatistics ret;
         if (Constants.PERIOD_ANNUAL.equals(period)) {
             ret = byIndustry.stream()
