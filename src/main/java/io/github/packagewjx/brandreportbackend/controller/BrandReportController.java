@@ -23,7 +23,7 @@ public class BrandReportController extends BaseController<BrandReport, String> {
     private BrandReportService service;
 
     public BrandReportController(BrandReportService service) {
-        super(service);
+        super(service, BrandReport.class);
         this.service = service;
     }
 

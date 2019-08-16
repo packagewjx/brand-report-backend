@@ -23,7 +23,7 @@ public class IndustryStatisticsController extends BaseController<IndustryStatist
     private IndustryStatisticsService industryStatisticsService;
 
     protected IndustryStatisticsController(IndustryStatisticsService service) {
-        super(service);
+        super(service, IndustryStatistics.class);
         this.industryStatisticsService = service;
     }
 

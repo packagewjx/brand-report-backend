@@ -24,7 +24,7 @@ public class IndexController extends BaseController<Index, String> {
     private IndexService indexService;
 
     protected IndexController(IndexService service) {
-        super(service);
+        super(service, Index.class);
         indexService = service;
     }
 

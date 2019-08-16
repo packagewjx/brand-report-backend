@@ -17,7 +17,7 @@ import java.util.Objects;
 @Api(tags = {"品牌报告数据集合访问接口"})
 public class CollectionController extends BaseController<Collection, String> {
     protected CollectionController(CollectionService service) {
-        super(service);
+        super(service, Collection.class);
     }
 
     @Override

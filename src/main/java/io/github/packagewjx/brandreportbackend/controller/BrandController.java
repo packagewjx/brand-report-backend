@@ -17,7 +17,7 @@ import java.util.Objects;
 @Api(tags = {"品牌访问接口"})
 public class BrandController extends BaseController<Brand, String> {
     protected BrandController(BaseService<Brand, String> service) {
-        super(service);
+        super(service, Brand.class);
     }
 
     @Override

@@ -1,12 +1,15 @@
 package io.github.packagewjx.brandreportbackend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.packagewjx.brandreportbackend.exception.EntityNotExistException;
 import io.github.packagewjx.brandreportbackend.service.BaseService;
 import io.swagger.annotations.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,9 +21,13 @@ import java.util.Optional;
  **/
 public abstract class BaseController<T, ID> {
     private BaseService<T, ID> service;
+    private Class<T> tClass;
+    @Autowired
+    private ObjectMapper mapper;
 
-    protected BaseController(BaseService<T, ID> service) {
+    protected BaseController(BaseService<T, ID> service, Class<T> tClass) {
         this.service = service;
+        this.tClass = tClass;
     }
 
     /**
@@ -106,12 +113,19 @@ public abstract class BaseController<T, ID> {
 
     @ApiOperation(value = "将传入的对象转变为查询条件，查询符合的所有实体对象", httpMethod = "GET")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "获取成功")
+            @ApiResponse(code = 200, message = "获取成功"),
+            @ApiResponse(code = 400, message = "请求不正确，可能由于example的格式错误，需要是经过URL编码的JSON格式")
     })
     @RequestMapping(value = "", method = RequestMethod.GET, params = {"action=query"})
     @ApiParam(name = "action", allowableValues = "query", required = true, value = "查询API的操作参数")
-    public ResponseEntity<List<T>> getAllByExample(@RequestBody @ApiParam(value = "查询的条件，以实体对象方式给出", required = true) T example) {
-        return new ResponseEntity<>(new ArrayList<>(((Collection<T>) service.getAllByExample(example))), HttpStatus.OK);
+    public ResponseEntity<List<T>> getAllByExample(@RequestParam(name = "example") @ApiParam(value = "查询的条件，是实体对象的JSON表示", required = true) String example) {
+        T t;
+        try {
+            t = mapper.readValue(example, tClass);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(new ArrayList<>(((Collection<T>) service.getAllByExample(t))), HttpStatus.OK);
     }
 
     @ExceptionHandler({IllegalArgumentException.class})

@@ -17,7 +17,7 @@ import java.util.Objects;
 @Api(tags = "品牌报告评价访问接口")
 public class BrandReportCommentController extends BaseController<BrandReportComment, String> {
     protected BrandReportCommentController(BrandReportCommentService service) {
-        super(service);
+        super(service, BrandReportComment.class);
     }
 
     @Override

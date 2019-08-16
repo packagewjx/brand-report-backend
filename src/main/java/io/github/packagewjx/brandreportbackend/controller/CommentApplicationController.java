@@ -18,7 +18,7 @@ import java.util.Objects;
 public class CommentApplicationController extends BaseController<CommentApplication, String> {
 
     protected CommentApplicationController(CommentApplicationService service) {
-        super(service);
+        super(service, CommentApplication.class);
     }
 
     @Override
