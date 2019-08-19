@@ -11,7 +11,12 @@ services:
     ports:
       - 8080:8080
     restart: always
+    environment:
+      BRAND_FILE: /data/brand.json
+      INDEX_FILE: /data/index.json
+      COLLECTION_FILE: /data/collection.json
     volumes:
       - ./backend/logs:/var/lib/message/brand-report-backend
+      - ./backend/data:/data
     depends_on:
       - mongo
