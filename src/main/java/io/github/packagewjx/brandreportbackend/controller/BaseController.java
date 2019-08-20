@@ -3,7 +3,10 @@ package io.github.packagewjx.brandreportbackend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.packagewjx.brandreportbackend.exception.EntityNotExistException;
 import io.github.packagewjx.brandreportbackend.service.BaseService;
+import io.github.packagewjx.brandreportbackend.utils.UtilFunctions;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,8 @@ import java.util.Optional;
  * @date 19-8-2
  **/
 public abstract class BaseController<T, ID> {
+    private static final Logger logger = LoggerFactory.getLogger("BaseController");
+
     private BaseService<T, ID> service;
     private Class<T> tClass;
     @Autowired
@@ -29,15 +34,6 @@ public abstract class BaseController<T, ID> {
         this.service = service;
         this.tClass = tClass;
     }
-
-    /**
-     * 用于确认这个id是否是entity的ID
-     *
-     * @param entity 所检查的entity
-     * @param id     ID值
-     * @return true代表id是entity的ID，false则不是
-     */
-    protected abstract boolean isIdOfEntity(T entity, ID id);
 
     @ApiOperation(value = "插入新的实体", httpMethod = "POST")
     @ApiResponses({
@@ -58,7 +54,7 @@ public abstract class BaseController<T, ID> {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<T> update(@RequestBody @ApiParam(value = "更新后的实体") T entity,
                                     @PathVariable("id") ID id) {
-        if (!isIdOfEntity(entity, id)) {
+        if (!service.isIdOfEntity(id, entity)) {
             throw new IllegalArgumentException("ID错误");
         }
         return new ResponseEntity<>(service.save(entity), HttpStatus.OK);
@@ -126,6 +122,37 @@ public abstract class BaseController<T, ID> {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(new ArrayList<>(((Collection<T>) service.getAllByExample(t))), HttpStatus.OK);
+    }
+
+    /**
+     * 对于Map，则替换相同键的部分。对于数组或List
+     * 则替换下标相同的部分，且将超长的部分加入到数组中。对于Set，则替换HashCode相同的部分。对于基本类型及其包装类，则
+     * 替换值。其他的类型，则递归进入替换
+     *
+     * @param id        目标的Id
+     * @param updateVal 值
+     * @return 更新后的值
+     */
+    @ApiOperation(value = "部分更新，只更新提交的实体对象中不是Null的部分")
+    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", required = true, paramType = "path")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "更新成功"),
+            @ApiResponse(code = 400, message = "参数有误。请查看是否错误的修改了ID"),
+            @ApiResponse(code = 404, message = "未找到实体。可能ID不正确"),
+    })
+    public ResponseEntity<T> partialUpdate(@PathVariable("id") ID id, @RequestBody T updateVal) {
+        Optional<T> byId = service.getById(id);
+        T entity = byId.orElseThrow(() -> new EntityNotExistException("没有ID为" + id + "的实体"));
+        UtilFunctions.partialChange(entity, updateVal, logger);
+        // 检查ID是否被更改了
+        if (!service.isIdOfEntity(id, entity)) {
+            throw new IllegalArgumentException("不允许修改实体ID");
+        }
+        entity = service.save(entity);
+        return new ResponseEntity<>(entity, HttpStatus.OK);
     }
 
     @ExceptionHandler({IllegalArgumentException.class})

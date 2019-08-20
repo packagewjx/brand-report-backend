@@ -6,8 +6,6 @@ import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-8-3
@@ -18,10 +16,5 @@ import java.util.Objects;
 public class CollectionController extends BaseController<Collection, String> {
     protected CollectionController(CollectionService service) {
         super(service, Collection.class);
-    }
-
-    @Override
-    protected boolean isIdOfEntity(Collection entity, String s) {
-        return Objects.equals(entity.getCollectionId(), s);
     }
 }

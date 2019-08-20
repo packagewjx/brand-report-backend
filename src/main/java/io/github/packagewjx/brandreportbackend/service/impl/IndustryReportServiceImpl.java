@@ -110,4 +110,9 @@ public class IndustryReportServiceImpl extends BaseServiceImpl<IndustryReport, S
 
         return report;
     }
+
+    @Override
+    public boolean isIdOfEntity(String s, IndustryReport entity) {
+        return Objects.equals(s, entity.getIndustryReportId());
+    }
 }

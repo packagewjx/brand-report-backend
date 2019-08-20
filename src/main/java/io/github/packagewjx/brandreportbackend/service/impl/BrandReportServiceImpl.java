@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
@@ -50,5 +51,10 @@ public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String>
         logger.info("开始给品牌ID{}的品牌报告导入数据", brandId);
         dataImporter.importData(report);
         return report;
+    }
+
+    @Override
+    public boolean isIdOfEntity(String s, BrandReport entity) {
+        return Objects.equals(s, entity.getReportId());
     }
 }

@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -68,5 +65,10 @@ public class CollectionServiceImpl extends BaseServiceImpl<Collection, String> i
                 });
         combine.setData(combinedMap.orElse(new HashMap<>(0)));
         return combine;
+    }
+
+    @Override
+    public boolean isIdOfEntity(String s, Collection entity) {
+        return Objects.equals(s, entity.getCollectionId());
     }
 }

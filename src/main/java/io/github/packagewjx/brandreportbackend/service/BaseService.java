@@ -20,6 +20,17 @@ public interface BaseService<T, ID> {
     T save(T val);
 
     /**
+     * 部分更新实体。仅仅使用updateVal中非null的部分进行更新。
+     * 更新使用<code>UtilFunctions.partialChange</code>函数，查看该文档了解详情
+     *
+     * @param id        ID
+     * @param updateVal 新的值
+     * @return 更新后的实体
+     * @see io.github.packagewjx.brandreportbackend.utils.UtilFunctions
+     */
+    T partialUpdate(ID id, T updateVal);
+
+    /**
      * 保存所有的实体
      *
      * @param val 实体集
@@ -86,4 +97,13 @@ public interface BaseService<T, ID> {
      * @return 所有对象
      */
     Iterable<T> getAll();
+
+    /**
+     * 查看id是否是entity的id相等
+     *
+     * @param id     ID
+     * @param entity 实体
+     * @return true则是，否则不是
+     */
+    boolean isIdOfEntity(ID id, T entity);
 }

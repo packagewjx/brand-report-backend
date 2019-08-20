@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-8-4
@@ -25,11 +23,6 @@ public class IndustryStatisticsController extends BaseController<IndustryStatist
     protected IndustryStatisticsController(IndustryStatisticsService service) {
         super(service, IndustryStatistics.class);
         this.industryStatisticsService = service;
-    }
-
-    @Override
-    protected boolean isIdOfEntity(IndustryStatistics entity, String s) {
-        return Objects.equals(entity.getStatId(), s);
     }
 
     @RequestMapping(value = "", params = "count", method = RequestMethod.GET)

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
@@ -26,11 +25,6 @@ public class IndexController extends BaseController<Index, String> {
     protected IndexController(IndexService service) {
         super(service, Index.class);
         indexService = service;
-    }
-
-    @Override
-    protected boolean isIdOfEntity(Index entity, String s) {
-        return Objects.equals(entity.getIndexId(), s);
     }
 
     @RequestMapping(value = "", params = {"root"}, method = RequestMethod.GET)

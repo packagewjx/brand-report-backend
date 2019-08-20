@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-8-3
@@ -25,11 +23,6 @@ public class BrandReportController extends BaseController<BrandReport, String> {
     public BrandReportController(BrandReportService service) {
         super(service, BrandReport.class);
         this.service = service;
-    }
-
-    @Override
-    protected boolean isIdOfEntity(BrandReport entity, String s) {
-        return Objects.equals(entity.getBrandId(), s);
     }
 
     @ApiOperation(value = "根据品牌ID与时间构建新报告", httpMethod = "GET")

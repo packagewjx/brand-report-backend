@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-7-17
@@ -28,5 +30,10 @@ public class IndustryStatisticsServiceImpl extends BaseServiceImpl<IndustryStati
             throw new IllegalArgumentException("year和industry不能为空");
         }
         return counter.count(industry, year, period, periodTimeNumber);
+    }
+
+    @Override
+    public boolean isIdOfEntity(String s, IndustryStatistics entity) {
+        return Objects.equals(s, entity.getStatId());
     }
 }

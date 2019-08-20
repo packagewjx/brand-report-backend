@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -77,5 +78,10 @@ public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements 
     public List<Index> getAllByType(String type) {
         logger.info("获取类型为{}的指标", type);
         return indexRepository.findByType(type);
+    }
+
+    @Override
+    public boolean isIdOfEntity(String s, Index entity) {
+        return Objects.equals(s, entity.getIndexId());
     }
 }
