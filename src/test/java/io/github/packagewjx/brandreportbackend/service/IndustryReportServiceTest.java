@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
@@ -42,4 +43,26 @@ public class IndustryReportServiceTest extends BaseTest {
             brandReport.getData().forEach((s1, o) -> Assert.assertNotNull(o));
         });
     }
+
+    @Test
+    public void saveGetDeleteOne() {
+        IndustryReport report = service.buildIndustryReport("家电", 2018, Constants.PERIOD_ANNUAL, 0);
+        report = service.save(report);
+        Assert.assertNotNull(report.getIndustryReportId());
+
+        Optional<IndustryReport> byId = service.getById(report.getIndustryReportId());
+        Assert.assertTrue(byId.isPresent());
+        report = byId.get();
+        Assert.assertEquals("家电", report.getIndustry());
+        Assert.assertEquals((Integer) 2018, report.getYear());
+        Assert.assertNotNull(report.getBrandReports());
+        Assert.assertNotEquals(0, report.getBrandReports());
+        Assert.assertNotNull(report.getStat());
+
+        service.delete(report);
+        byId = service.getById(report.getIndustryReportId());
+        Assert.assertFalse(byId.isPresent());
+    }
+
+
 }

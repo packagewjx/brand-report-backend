@@ -19,25 +19,21 @@ public class IndustryReport {
     @Id
     @ApiModelProperty
     private String industryReportId;
-
     /**
      * 行业名
      */
     @ApiModelProperty("行业名")
     private String industry;
-
     /**
      * 报告年份
      */
     @ApiModelProperty(value = "报告年份", required = true)
     private Integer year;
-
     /**
      * 年内报告统计时间序号
      */
     @ApiModelProperty(value = "年内报告统计时间序号")
     private Integer periodTimeNumber;
-
     /**
      * 报告统计时长
      * <p>
@@ -47,7 +43,6 @@ public class IndustryReport {
      */
     @ApiModelProperty(value = "报告统计时长", required = true, allowableValues = "annual, monthly, quarterly")
     private String period;
-
     /**
      * 品牌Id与品牌报告的映射表
      * <p>
@@ -55,7 +50,6 @@ public class IndustryReport {
      */
     @ApiModelProperty("品牌报告列表")
     private Map<String, BrandReport> brandReports;
-
     /**
      * 行业统计数据
      */
@@ -66,6 +60,39 @@ public class IndustryReport {
      */
     @ApiModelProperty("创建时间")
     private Date createTime;
+
+    @Override
+    public String toString() {
+        return "IndustryReport{" +
+                "industryReportId='" + industryReportId + '\'' +
+                ", industry='" + industry + '\'' +
+                ", year=" + year +
+                ", periodTimeNumber=" + periodTimeNumber +
+                ", period='" + period + '\'' +
+                ", brandReports=" + brandReports +
+                ", stat=" + stat +
+                ", createTime=" + createTime +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        IndustryReport report = (IndustryReport) o;
+
+        return industryReportId.equals(report.industryReportId);
+    }
+
+    @Override
+    public int hashCode() {
+        return industryReportId.hashCode();
+    }
 
     public Date getCreateTime() {
         return createTime;
