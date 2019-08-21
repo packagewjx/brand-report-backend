@@ -5,12 +5,15 @@ import io.github.packagewjx.brandreportbackend.domain.meta.Index;
 import io.github.packagewjx.brandreportbackend.domain.statistics.data.BaseStatistics;
 import io.github.packagewjx.brandreportbackend.domain.statistics.data.NumberStatistics;
 import io.github.packagewjx.brandreportbackend.service.report.score.ScoreAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-7-19
  **/
 public class RatioScoreCounter implements IndexScoreCounter {
+    private static final Logger logger = LoggerFactory.getLogger(RatioScoreCounter.class);
     private String indexId;
     private double totalScore;
 
@@ -32,6 +35,8 @@ public class RatioScoreCounter implements IndexScoreCounter {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(indexId + "比例总分不是数字", e);
         }
+
+        logger.info("指标{}使用比例计分器，总分为{}", indexId, totalScore);
     }
 
     @Override
@@ -41,6 +46,7 @@ public class RatioScoreCounter implements IndexScoreCounter {
         }
         Object data = brandReport.getData().get(indexId);
         if (data == null) {
+            logger.trace("品牌报告(ID:{})的{}指标的值为null，分数为0", brandReport.getReportId(), indexId);
             return 0;
         }
         if (!(data instanceof Number)) {
@@ -57,6 +63,8 @@ public class RatioScoreCounter implements IndexScoreCounter {
         }
 
         double sum = ((NumberStatistics) baseStatistics).getSum();
-        return val / sum * totalScore;
+        double score = val / sum * totalScore;
+        logger.trace("品牌报告(ID:{})的{}指标的值为{}，行业数据为{}，分数{}", brandReport.getReportId(), indexId, val, sum, score);
+        return score;
     }
 }

@@ -9,6 +9,8 @@ import io.github.packagewjx.brandreportbackend.domain.statistics.data.BaseStatis
 import io.github.packagewjx.brandreportbackend.domain.statistics.data.NumberStatistics;
 import io.github.packagewjx.brandreportbackend.service.report.score.ScoreAnnotations;
 import io.github.packagewjx.brandreportbackend.service.report.score.StepScoreDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class StepScoreCounter implements IndexScoreCounter {
     public static final String ARG_INDUSTRY_AVERAGE = "average";
 
     private static final String DEFAULT_LOWER_BOUND_EXCLUSIVE = "false";
+
+    private static final Logger logger = LoggerFactory.getLogger(StepScoreCounter.class);
 
     private StepScoreDefinition definition;
     private List<Object> interval;
@@ -105,6 +109,9 @@ public class StepScoreCounter implements IndexScoreCounter {
             // 预先排好序
             this.interval.sort(Comparator.comparingDouble(o -> ((Double) o)));
         }
+
+        logger.info("指标{}使用阶梯式计分器，{}包含下界，{}使用动态值，区间为{}，分数为{}", indexId, lowerBoundExclusive ? "不" : "",
+                hasDynamicVariable ? "" : "不", definition.getIntervalSplit(), definition.getIntervalScore());
     }
 
     @Override
@@ -114,6 +121,7 @@ public class StepScoreCounter implements IndexScoreCounter {
         }
         Object d = brandReport.getData().get(indexId);
         if (d == null) {
+            logger.trace("品牌报告(ID:{})的指标{}的值为null，分数为0", brandReport.getReportId(), indexId);
             return 0;
         }
         if (!(d instanceof Number)) {
@@ -123,6 +131,7 @@ public class StepScoreCounter implements IndexScoreCounter {
 
         List<Double> split = new ArrayList<>(this.interval.size());
         if (hasDynamicVariable) {
+            // 将区间排好序
             for (Object o : interval) {
                 if (o instanceof Double) {
                     split.add((Double) o);
@@ -155,6 +164,9 @@ public class StepScoreCounter implements IndexScoreCounter {
                 intervalNum++;
             }
         }
-        return definition.getIntervalScore().get(intervalNum);
+        Double score = definition.getIntervalScore().get(intervalNum);
+        logger.trace("品牌报告(ID:{})的{}指标的值为{}，落入第{}个区间，分数为{}", brandReport.getReportId(), indexId,
+                val, intervalNum + 1, score);
+        return score;
     }
 }

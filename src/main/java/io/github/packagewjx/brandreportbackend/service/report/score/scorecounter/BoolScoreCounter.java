@@ -3,6 +3,8 @@ package io.github.packagewjx.brandreportbackend.service.report.score.scorecounte
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
 import io.github.packagewjx.brandreportbackend.domain.meta.Index;
 import io.github.packagewjx.brandreportbackend.service.report.score.ScoreAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import java.util.Map;
 public class BoolScoreCounter implements IndexScoreCounter {
     public static final double DEFAULT_TRUE_SCORE = 100;
     public static final double DEFAULT_FALSE_SCORE = 0;
+    private static final Logger logger = LoggerFactory.getLogger(BoolScoreCounter.class);
 
     private String indexId;
     private double trueScore;
@@ -50,6 +53,7 @@ public class BoolScoreCounter implements IndexScoreCounter {
         }
 
         this.indexId = index.getIndexId();
+        logger.info("指标{}使用布尔计分器，值为true的分数为{}，值为false的分数为{}", indexId, trueScore, falseScore);
     }
 
 
@@ -69,17 +73,20 @@ public class BoolScoreCounter implements IndexScoreCounter {
     @Override
     public double countScore(BrandReport brandReport, Context ctx) {
         Object val = brandReport.getData().get(indexId);
+        double score = 0;
         if (val == null) {
-            return this.falseScore;
-        }
-        if (val instanceof Boolean) {
-            return ((Boolean) val) ? trueScore : falseScore;
+            score = falseScore;
+        } else if (val instanceof Boolean) {
+            score = ((Boolean) val) ? trueScore : falseScore;
         } else if (val instanceof Number) {
             // 若是数字，则当为0的时候返回false，其余返回true
-            return ((Number) val).doubleValue() == 0 ? falseScore : trueScore;
+            score = ((Number) val).doubleValue() == 0 ? falseScore : trueScore;
         } else {
+            logger.warn("品牌报告(ID:{})指标{}的值为{}，类型是对象，而不是布尔", brandReport.getReportId(), indexId, val);
             // 是普通对象，且不是null，返回true的分数
-            return this.trueScore;
+            score = this.trueScore;
         }
+        logger.trace("品牌报告(ID:{})指标{}的值为{}，分数为{}", brandReport.getReportId(), indexId, val, score);
+        return score;
     }
 }
