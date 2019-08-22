@@ -10,7 +10,7 @@ public class BrandRepositoryTest extends BaseTest {
     private BrandRepository brandRepository;
 
     @Test
-    public void testInsert() {
+    public void testInsertAndDelete() {
         Brand brand = new Brand();
         brand.setBrandId("3");
         brand.setBrandName("meidi");
@@ -21,6 +21,9 @@ public class BrandRepositoryTest extends BaseTest {
         brand.setBrandName("haier");
         brand.setIndustry("家电");
         brandRepository.insert(brand);
+
+        brandRepository.deleteById("3");
+        brandRepository.deleteById("4");
     }
 
     @Test
@@ -33,13 +36,7 @@ public class BrandRepositoryTest extends BaseTest {
             System.out.println("not found");
         }
 
-    }
-
-    @Test
-    public void testDelete() {
         brandRepository.deleteById("1");
-        brandRepository.deleteById("3");
-        brandRepository.deleteById("4");
     }
 
     @Test
