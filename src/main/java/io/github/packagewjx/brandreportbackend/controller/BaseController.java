@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.packagewjx.brandreportbackend.exception.EntityNotExistException;
 import io.github.packagewjx.brandreportbackend.exception.MethodNotSupportException;
 import io.github.packagewjx.brandreportbackend.service.BaseService;
-import io.github.packagewjx.brandreportbackend.utils.UtilFunctions;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,15 +144,7 @@ public abstract class BaseController<T, ID> {
             @ApiResponse(code = 404, message = "未找到实体。可能ID不正确"),
     })
     public ResponseEntity<T> partialUpdate(@PathVariable("id") ID id, @RequestBody T updateVal) {
-        Optional<T> byId = service.getById(id);
-        T entity = byId.orElseThrow(() -> new EntityNotExistException("没有ID为" + id + "的实体"));
-        UtilFunctions.partialChange(entity, updateVal, logger);
-        // 检查ID是否被更改了
-        if (!service.isIdOfEntity(id, entity)) {
-            throw new IllegalArgumentException("不允许修改实体ID");
-        }
-        entity = service.save(entity);
-        return new ResponseEntity<>(entity, HttpStatus.OK);
+        return new ResponseEntity<>(service.partialUpdate(id, updateVal), HttpStatus.OK);
     }
 
     @ExceptionHandler({IllegalArgumentException.class, MethodNotSupportException.class})

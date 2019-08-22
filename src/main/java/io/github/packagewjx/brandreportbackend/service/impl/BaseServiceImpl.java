@@ -29,6 +29,9 @@ public abstract class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
 
     @Override
     public boolean isIdOfEntity(ID id, T entity) {
+        if (id == null || entity == null) {
+            return false;
+        }
         return Objects.equals(id, getId(entity));
     }
 
