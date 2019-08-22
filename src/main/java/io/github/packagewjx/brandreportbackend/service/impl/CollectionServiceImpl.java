@@ -8,9 +8,14 @@ import io.github.packagewjx.brandreportbackend.utils.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -27,6 +32,21 @@ public class CollectionServiceImpl extends BaseServiceImpl<Collection, String> i
     protected CollectionServiceImpl(CollectionRepository repository) {
         super(repository);
         this.repository = repository;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * 当保存以后，将会删除报告构建与统计方法的缓存。暂时删除所有缓存
+     */
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = "industryStatisticsCount", allEntries = true),
+            @CacheEvict(value = "brandReportBuild", allEntries = true),
+            @CacheEvict(value = "industryReportBuild", allEntries = true)
+    })
+    public Collection save(Collection val) {
+        return super.save(val);
     }
 
     @Override
@@ -68,7 +88,7 @@ public class CollectionServiceImpl extends BaseServiceImpl<Collection, String> i
     }
 
     @Override
-    public boolean isIdOfEntity(String s, Collection entity) {
-        return Objects.equals(s, entity.getCollectionId());
+    public String getId(Collection entity) {
+        return entity.getCollectionId();
     }
 }

@@ -10,18 +10,20 @@ import io.github.packagewjx.brandreportbackend.service.report.score.ScoreDataImp
 import io.github.packagewjx.brandreportbackend.utils.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-8-2
  **/
 @Service
+@CacheConfig(cacheNames = {"brandReportService"})
 public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String> implements BrandReportService {
     private final static Logger logger = LoggerFactory.getLogger(BrandReportServiceImpl.class);
 
@@ -37,6 +39,7 @@ public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String>
     }
 
     @Override
+    @Cacheable("brandReportBuild")
     public BrandReport buildReport(String brandId, int year, String period, Integer periodTimeNumber) {
         logger.info("构建品牌Id{}在{}的品牌报告", brandId, LogUtils.getLogTime(year, period, periodTimeNumber));
 
@@ -54,7 +57,7 @@ public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String>
     }
 
     @Override
-    public boolean isIdOfEntity(String s, BrandReport entity) {
-        return Objects.equals(s, entity.getReportId());
+    public String getId(BrandReport entity) {
+        return entity.getReportId();
     }
 }

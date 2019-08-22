@@ -6,12 +6,15 @@ import io.github.packagewjx.brandreportbackend.repository.meta.IndexRepository;
 import io.github.packagewjx.brandreportbackend.service.IndexService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
  * @date 19-7-16
  **/
 @Service
+@CacheConfig(cacheNames = {"indexService"})
 public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements IndexService {
     private static final Logger logger = LoggerFactory.getLogger(IndexServiceImpl.class);
     private IndexRepository indexRepository;
@@ -28,6 +32,60 @@ public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements 
         this.indexRepository = repository;
     }
 
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "childOfRootIndex", allEntries = true),
+            @CacheEvict(cacheNames = "leafIndex", allEntries = true)
+    })
+    public Index save(Index val) {
+        return super.save(val);
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "childOfRootIndex", allEntries = true),
+            @CacheEvict(cacheNames = "leafIndex", allEntries = true)
+    })
+    public void delete(Index val) {
+        super.delete(val);
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "childOfRootIndex", allEntries = true),
+            @CacheEvict(cacheNames = "leafIndex", allEntries = true)
+    })
+    public void deleteById(String s) {
+        super.deleteById(s);
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "childOfRootIndex", allEntries = true),
+            @CacheEvict(cacheNames = "leafIndex", allEntries = true)
+    })
+    public void deleteAll(Iterable<Index> entities) {
+        super.deleteAll(entities);
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "childOfRootIndex", allEntries = true),
+            @CacheEvict(cacheNames = "leafIndex", allEntries = true)
+    })
+    public Index partialUpdate(String s, Index updateVal) {
+        return super.partialUpdate(s, updateVal);
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "childOfRootIndex", allEntries = true),
+            @CacheEvict(cacheNames = "leafIndex", allEntries = true)
+    })
+    public Iterable<Index> saveAll(Iterable<Index> val) {
+        return super.saveAll(val);
+    }
+
     /**
      * 寻找某个中间rootIndexId的子树的所有叶子节点
      *
@@ -35,6 +93,7 @@ public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements 
      * @return 叶子Index
      */
     @Override
+    @Cacheable("childOfRootIndex")
     public List<Index> getLeafIndicesOfRoot(String rootIndexId) {
         logger.info("获取根指标{}的所有叶子指标中", rootIndexId);
         if (rootIndexId == null || "".equals(rootIndexId)) {
@@ -68,6 +127,7 @@ public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements 
     }
 
     @Override
+    @Cacheable(value = "leafIndex")
     public List<Index> getAllLeafIndices() {
         logger.info("获取所有叶子节点指标");
         return ((Collection<Index>) this.getAll()).parallelStream()
@@ -81,7 +141,7 @@ public class IndexServiceImpl extends BaseServiceImpl<Index, String> implements 
     }
 
     @Override
-    public boolean isIdOfEntity(String s, Index entity) {
-        return Objects.equals(s, entity.getIndexId());
+    public String getId(Index entity) {
+        return entity.getIndexId();
     }
 }

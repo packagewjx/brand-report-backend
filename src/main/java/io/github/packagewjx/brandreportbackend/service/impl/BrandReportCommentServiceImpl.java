@@ -5,8 +5,6 @@ import io.github.packagewjx.brandreportbackend.repository.comment.BrandReportCom
 import io.github.packagewjx.brandreportbackend.service.BrandReportCommentService;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-8-5
@@ -18,7 +16,7 @@ public class BrandReportCommentServiceImpl extends BaseServiceImpl<BrandReportCo
     }
 
     @Override
-    public boolean isIdOfEntity(String s, BrandReportComment entity) {
-        return Objects.equals(entity.getCommentId(), s);
+    public String getId(BrandReportComment entity) {
+        return entity.getCommentId();
     }
 }

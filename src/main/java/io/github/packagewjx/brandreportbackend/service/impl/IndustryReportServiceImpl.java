@@ -16,6 +16,8 @@ import io.github.packagewjx.brandreportbackend.service.IndustryStatisticsService
 import io.github.packagewjx.brandreportbackend.utils.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
  * @date 19-8-5
  **/
 @Service
+@CacheConfig(cacheNames = {"industryReportService"})
 public class IndustryReportServiceImpl implements IndustryReportService {
     private static Logger logger = LoggerFactory.getLogger(IndustryReportServiceImpl.class);
     private BrandService brandService;
@@ -106,6 +109,7 @@ public class IndustryReportServiceImpl implements IndustryReportService {
     }
 
     @Override
+    @Cacheable(value = "industryReportBuild")
     public IndustryReport buildIndustryReport(String industry, Integer year, @Nullable String period, @Nullable Integer periodTimeNumber) {
         if (industry == null || "".equals(industry) || year == null) {
             throw new IllegalArgumentException("industry和year不能为空");

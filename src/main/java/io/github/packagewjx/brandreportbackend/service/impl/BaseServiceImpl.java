@@ -3,9 +3,14 @@ package io.github.packagewjx.brandreportbackend.service.impl;
 import io.github.packagewjx.brandreportbackend.exception.EntityNotExistException;
 import io.github.packagewjx.brandreportbackend.service.BaseService;
 import io.github.packagewjx.brandreportbackend.utils.UtilFunctions;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -14,6 +19,7 @@ import java.util.Optional;
  * <p>
  * 基服务的基本实现
  **/
+@CacheConfig(cacheNames = {"baseService"})
 public abstract class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
     private MongoRepository<T, ID> repository;
 
@@ -22,14 +28,26 @@ public abstract class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
     }
 
     @Override
-    public abstract boolean isIdOfEntity(ID id, T entity);
+    public boolean isIdOfEntity(ID id, T entity) {
+        return Objects.equals(id, getId(entity));
+    }
+
+    /**
+     * 获取实体的ID
+     *
+     * @param entity 实体
+     * @return 实体的ID
+     */
+    public abstract ID getId(T entity);
 
     @Override
+    @CachePut(key = "getTargetClass() + getMethodName() + getTarget().getId(#val)")
     public T save(T val) {
         return repository.save(val);
     }
 
     @Override
+    @CachePut(key = "getTargetClass() + getMethodName() + #id")
     public T partialUpdate(ID id, T updateVal) {
         Optional<T> byId = getById(id);
         T entity = byId.orElseThrow(() -> new EntityNotExistException("没有ID为" + id + "的实体"));
@@ -42,26 +60,31 @@ public abstract class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
     }
 
     @Override
+    @CacheEvict(key = "getTargetClass() + getMethodName()", allEntries = true)
     public Iterable<T> saveAll(Iterable<T> val) {
         return repository.saveAll(val);
     }
 
     @Override
+    @CacheEvict(key = "getTargetClass() + getMethodName() + getTarget().getId(#val)")
     public void delete(T val) {
         repository.delete(val);
     }
 
     @Override
+    @CacheEvict(key = "getTargetClass() + getMethodName() + #id")
     public void deleteById(ID id) {
         repository.deleteById(id);
     }
 
     @Override
+    @CacheEvict(key = "getTargetClass() + getMethodName()", allEntries = true)
     public void deleteAll(Iterable<T> entities) {
         repository.deleteAll(entities);
     }
 
     @Override
+    @Cacheable(key = "getTargetClass() + getMethodName() + #id", unless = "#result == null")
     public Optional<T> getById(ID id) {
         return repository.findById(id);
     }

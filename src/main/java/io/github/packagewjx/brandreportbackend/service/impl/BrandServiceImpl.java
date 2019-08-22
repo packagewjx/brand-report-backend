@@ -5,8 +5,6 @@ import io.github.packagewjx.brandreportbackend.service.BrandService;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
  * @date 19-7-17
@@ -18,7 +16,7 @@ public class BrandServiceImpl extends BaseServiceImpl<Brand, String> implements 
     }
 
     @Override
-    public boolean isIdOfEntity(String s, Brand entity) {
-        return Objects.equals(s, entity.getBrandId());
+    public String getId(Brand entity) {
+        return entity.getBrandId();
     }
 }
