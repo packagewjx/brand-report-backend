@@ -2,6 +2,7 @@ package io.github.packagewjx.brandreportbackend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.packagewjx.brandreportbackend.exception.EntityNotExistException;
+import io.github.packagewjx.brandreportbackend.exception.MethodNotSupportException;
 import io.github.packagewjx.brandreportbackend.service.BaseService;
 import io.github.packagewjx.brandreportbackend.utils.UtilFunctions;
 import io.swagger.annotations.*;
@@ -155,7 +156,7 @@ public abstract class BaseController<T, ID> {
         return new ResponseEntity<>(entity, HttpStatus.OK);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class})
+    @ExceptionHandler({IllegalArgumentException.class, MethodNotSupportException.class})
     public ResponseEntity<Exception> illegalArgument(IllegalArgumentException e) {
         return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
     }
