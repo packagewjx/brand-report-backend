@@ -64,9 +64,11 @@ public class IndustryReportServiceImpl implements IndustryReportService {
         reportDO.setPeriod(report.getPeriod());
         reportDO.setPeriodTimeNumber(report.getPeriodTimeNumber());
         reportDO.setIndustryStatisticsId(report.getStat() != null ? report.getStat().getStatId() : null);
-        Map<String, String> ids = new HashMap<>(report.getBrandReports().size());
-        report.getBrandReports().forEach((s, brandReport) -> ids.put(s, brandReport.getReportId()));
-        reportDO.setBrandReportIds(ids);
+        if (report.getBrandReports() != null) {
+            Map<String, String> ids = new HashMap<>(report.getBrandReports().size());
+            report.getBrandReports().forEach((s, brandReport) -> ids.put(s, brandReport.getReportId()));
+            reportDO.setBrandReportIds(ids);
+        }
         return reportDO;
     }
 

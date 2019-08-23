@@ -9,9 +9,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.net.URI;
+import java.net.URLEncoder;
 
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
@@ -54,5 +56,12 @@ public class IndustryReportControllerTest extends BaseTest {
                                         .andExpect(MockMvcResultMatchers.status().isOk());
                             });
                 });
+    }
+
+    @Test
+    public void getByExample() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(new URI("/industry-report?action=query&example=" + URLEncoder.encode("{}", "utf-8"))))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
