@@ -3,7 +3,6 @@ services:
   mongo:
     image: mongo:4.0
     volumes:
-      - ./mongo/init/:/docker-entrypoint-initdb.d/
       - ./mongo/db/:/data/db/
     restart: always
   brand-report-backend:
