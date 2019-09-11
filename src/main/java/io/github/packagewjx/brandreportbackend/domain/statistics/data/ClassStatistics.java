@@ -9,6 +9,7 @@ import java.util.Map;
 @ApiModel(description = "基于类别类型值的统计数据，记录每个值的品牌总数", parent = BaseStatistics.class)
 @TypeAlias("ClassStatistics")
 public class ClassStatistics extends BaseStatistics {
+    public static final String TYPE = "ClassStatistics";
     /**
      * 每个取值的品牌数映射表
      */
@@ -16,7 +17,7 @@ public class ClassStatistics extends BaseStatistics {
     private Map<?, Integer> counts;
 
     public ClassStatistics() {
-        super("ClassStatistics");
+        super(TYPE);
     }
 
     public Map<?, Integer> getCounts() {

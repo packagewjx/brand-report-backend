@@ -7,6 +7,7 @@ import org.springframework.data.annotation.TypeAlias;
 @ApiModel(description = "数字类型指标统计数据", parent = BaseStatistics.class)
 @TypeAlias(value = "NumberStatistics")
 public class NumberStatistics extends BaseStatistics {
+    public static final String TYPE = "NumberStatistics";
     /**
      * 总值
      */
@@ -20,7 +21,7 @@ public class NumberStatistics extends BaseStatistics {
     private Double average;
 
     public NumberStatistics() {
-        super("NumberStatistics");
+        super(NumberStatistics.TYPE);
     }
 
     public Double getSum() {

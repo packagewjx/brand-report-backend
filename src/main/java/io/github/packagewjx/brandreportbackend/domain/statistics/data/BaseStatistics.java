@@ -8,8 +8,8 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ClassStatistics.class, name = "ClassStatistics"),
-        @JsonSubTypes.Type(value = NumberStatistics.class, name = "NumberStatistics"),
+        @JsonSubTypes.Type(value = ClassStatistics.class, name = ClassStatistics.TYPE),
+        @JsonSubTypes.Type(value = NumberStatistics.class, name = NumberStatistics.TYPE),
 })
 @ApiIgnore("统计数据基类")
 public abstract class BaseStatistics {

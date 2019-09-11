@@ -3,6 +3,7 @@ package io.github.packagewjx.brandreportbackend.domain.meta;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
+import org.springframework.lang.Nullable;
 
 import java.util.Map;
 
@@ -68,6 +69,12 @@ public class Index {
     @ApiModelProperty(value = "本指标数据的具体类型", allowableValues = "number, string, bool, enum, indices", required = true)
     private String type;
     /**
+     * 指标的值域
+     */
+    @Nullable
+    @ApiModelProperty(value = "指标的值域")
+    private BaseRange range;
+    /**
      * 数据统计时长
      * <p>
      * 具体取值放置在Constants类中，以PERIOD_开头的常量。若是default，意味着本指标的统计周期与数据集和报告的统计周期一致
@@ -99,6 +106,15 @@ public class Index {
      */
     @ApiModelProperty(value = "指标注解。用于存放自定义的额外数据，以供其他系统（统计系统、计分系统）处理")
     private Map<String, String> annotations;
+
+    @Nullable
+    public BaseRange getRange() {
+        return range;
+    }
+
+    public void setRange(@Nullable BaseRange range) {
+        this.range = range;
+    }
 
     @Override
     public String toString() {

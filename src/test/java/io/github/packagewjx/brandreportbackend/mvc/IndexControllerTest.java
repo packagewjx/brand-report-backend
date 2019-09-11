@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.packagewjx.brandreportbackend.BaseTest;
 import io.github.packagewjx.brandreportbackend.domain.Constants;
+import io.github.packagewjx.brandreportbackend.domain.meta.EnumRange;
 import io.github.packagewjx.brandreportbackend.domain.meta.Index;
+import io.github.packagewjx.brandreportbackend.domain.meta.NumericRange;
 import io.github.packagewjx.brandreportbackend.service.IndexService;
 import io.github.packagewjx.brandreportbackend.service.report.score.ScoreAnnotations;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -17,9 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.net.URI;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author <a href="mailto:wu812730157@gmail.com">Junxian Wu</a>
@@ -31,6 +32,9 @@ public class IndexControllerTest extends BaseTest {
 
     @Autowired
     private IndexService indexService;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @Test
     public void getLeafIndicesOfRoot() throws Exception {
@@ -105,5 +109,58 @@ public class IndexControllerTest extends BaseTest {
                         Assert.assertEquals(ScoreAnnotations.StepScoreCounter.ANNOTATION_VALUE_TYPE, index.getAnnotations().get(ScoreAnnotations.ANNOTATION_KEY_TYPE));
                     });
                 });
+    }
+
+    @Test
+    public void rangeTest() throws Exception {
+        // 测试数字类型值域
+        Index index = new Index();
+        index.setType(Index.TYPE_NUMBER);
+        index.setDisplayName("测试指标");
+        index.setPeriod(Constants.PERIOD_DEFAULT);
+        index.setRange(new NumericRange(0.0, 100.0, 1.0));
+        mockMvc.perform(MockMvcRequestBuilders.post("/index")
+                .content(mapper.writeValueAsBytes(index))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(mvcResult -> {
+                    Index savedIndex = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), Index.class);
+                    Assert.assertNotNull(savedIndex.getIndexId());
+                    Assert.assertTrue(savedIndex.getRange() instanceof NumericRange);
+                    Assert.assertEquals(0.0, ((NumericRange) savedIndex.getRange()).getMin(), 0);
+                    Assert.assertEquals(100.0, ((NumericRange) savedIndex.getRange()).getMax(), 0);
+                    Assert.assertNotNull(((NumericRange) savedIndex.getRange()).getStep());
+                    Assert.assertEquals(1.0, ((NumericRange) savedIndex.getRange()).getStep(), 0);
+                    // 删除
+                    mockMvc.perform(MockMvcRequestBuilders.delete("/index/" + savedIndex.getIndexId()))
+                            .andExpect(MockMvcResultMatchers.status().isOk());
+                });
+
+        // 测试枚举类型值域
+        Set<Object> valueSet = new HashSet<>();
+        valueSet.add("1");
+        valueSet.add("2");
+        valueSet.add("3");
+        index.setRange(new EnumRange(valueSet));
+        mockMvc.perform(MockMvcRequestBuilders.post("/index")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsBytes(index)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(mvcResult -> {
+                    Index savedIndex = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), Index.class);
+                    Assert.assertNotNull(savedIndex.getIndexId());
+                    Assert.assertTrue(savedIndex.getRange() instanceof EnumRange);
+                    Assert.assertNotNull(savedIndex.getRange());
+                    Assert.assertEquals(3, ((EnumRange) savedIndex.getRange()).getAllowableValues().size());
+                    Assert.assertTrue(((EnumRange) savedIndex.getRange()).getAllowableValues().containsAll(valueSet));
+
+                    // 删除
+                    mockMvc.perform(MockMvcRequestBuilders.delete("/index/" + savedIndex.getIndexId()))
+                            .andExpect(MockMvcResultMatchers.status().isOk());
+                });
+
+
     }
 }
