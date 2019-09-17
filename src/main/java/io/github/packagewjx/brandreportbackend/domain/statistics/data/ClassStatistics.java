@@ -16,6 +16,12 @@ public class ClassStatistics extends BaseStatistics {
     @ApiModelProperty("每个取值的品牌数映射表")
     private Map<?, Integer> counts;
 
+    /**
+     * 数据总数
+     */
+    @ApiModelProperty("数据总数")
+    private int total;
+
     public ClassStatistics() {
         super(TYPE);
     }
@@ -26,5 +32,13 @@ public class ClassStatistics extends BaseStatistics {
 
     public void setCounts(Map<?, Integer> counts) {
         this.counts = counts;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 }

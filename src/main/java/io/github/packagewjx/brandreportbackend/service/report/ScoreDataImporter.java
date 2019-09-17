@@ -14,10 +14,10 @@ import io.github.packagewjx.brandreportbackend.service.report.BrandReportDataImp
 import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.Context;
 import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.IndexScoreCounter;
 import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.ScoreCounterFactory;
-import io.github.packagewjx.brandreportbackend.service.statistics.StatisticsCounter;
 import io.github.packagewjx.brandreportbackend.utils.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -35,7 +35,6 @@ public class ScoreDataImporter implements BrandReportDataImporter {
 
     private final IndustryStatisticsService industryStatisticsService;
     private final BrandService brandService;
-    private final StatisticsCounter statisticsCounter;
     /**
      * 指标ID与对应的计算分数类的Map
      */
@@ -45,11 +44,10 @@ public class ScoreDataImporter implements BrandReportDataImporter {
      */
     private Map<Index, Set<Index>> countMap;
 
-    public ScoreDataImporter(IndustryStatisticsService industryStatisticsService, BrandService brandService, StatisticsCounter statisticsCounter, IndexService indexService) {
+    public ScoreDataImporter(@Lazy IndustryStatisticsService industryStatisticsService, BrandService brandService, IndexService indexService) {
         logger.debug("构建ScoreDataImporter中");
         this.industryStatisticsService = industryStatisticsService;
         this.brandService = brandService;
-        this.statisticsCounter = statisticsCounter;
 
         logger.debug("获取所有指标");
         // 获取所有指标
@@ -102,7 +100,6 @@ public class ScoreDataImporter implements BrandReportDataImporter {
                     .findAny().orElse(null);
         } else {
             if (periodTimeNumber == null) {
-                logger.error("periodTimeNumber不能为空");
                 throw new IllegalArgumentException("periodTimeNumber不能为空");
             }
             ret = byIndustry.stream()
@@ -113,9 +110,10 @@ public class ScoreDataImporter implements BrandReportDataImporter {
 
         if (ret == null) {
             logger.info("目前没有保存{}在{}的统计数据，开始计算", industry, LogUtils.getLogTime(year, period, periodTimeNumber));
+            return industryStatisticsService.countStatistics(industry, year, period, periodTimeNumber);
+        } else {
+            return ret;
         }
-        // 若没有保存，则返回计算值
-        return ret != null ? ret : statisticsCounter.count(industry, year, period, periodTimeNumber);
     }
 
     @Override
