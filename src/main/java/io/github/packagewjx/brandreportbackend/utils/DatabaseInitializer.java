@@ -1,6 +1,5 @@
 package io.github.packagewjx.brandreportbackend.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.packagewjx.brandreportbackend.domain.Brand;
 import io.github.packagewjx.brandreportbackend.domain.data.Collection;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -56,30 +54,26 @@ public class DatabaseInitializer {
             logger.info("准备初始化数据库");
             if (indexFileName != null) {
                 logger.info("使用{}文件初始化Index集合", indexFileName);
-                doInitialize(indexFileName, indexService, Index.class, "indexId");
+                doInitialize(indexFileName, indexService, Index.class);
             }
             if (collectionFileName != null) {
                 logger.info("使用{}文件初始化Collection集合", collectionFileName);
-                doInitialize(collectionFileName, collectionService, Collection.class, "collectionId");
+                doInitialize(collectionFileName, collectionService, Collection.class);
             }
             if (brandFileName != null) {
                 logger.info("使用{}文件初始化Brand集合", brandFileName);
-                doInitialize(brandFileName, brandService, Brand.class, "brandId");
+                doInitialize(brandFileName, brandService, Brand.class);
             }
             System.exit(0);
         }
     }
 
-    private <T> void doInitialize(String fileName, BaseService<T, ?> service, Class<T> tClass, String idFieldName) throws IOException, IllegalAccessException, NoSuchFieldException {
+    private <T> void doInitialize(String fileName, BaseService<T, ?> service, Class<T> tClass) throws IOException {
         Scanner scanner = new Scanner(new File(fileName));
         Set<T> set = new HashSet<>();
         while (scanner.hasNextLine()) {
             String json = scanner.nextLine();
-            JsonNode jsonNode = mapper.readTree(json);
             T t = mapper.readValue(json, tClass);
-            Field idField = tClass.getDeclaredField(idFieldName);
-            idField.setAccessible(true);
-            idField.set(t, jsonNode.get("_id").asText());
             set.add(t);
         }
         logger.info("读取了{}条记录", set.size());

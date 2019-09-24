@@ -1,4 +1,4 @@
-package io.github.packagewjx.brandreportbackend.service.report.score;
+package io.github.packagewjx.brandreportbackend.service.report;
 
 
 import io.github.packagewjx.brandreportbackend.domain.Brand;
@@ -10,7 +10,7 @@ import io.github.packagewjx.brandreportbackend.exception.EntityNotExistException
 import io.github.packagewjx.brandreportbackend.service.BrandService;
 import io.github.packagewjx.brandreportbackend.service.IndexService;
 import io.github.packagewjx.brandreportbackend.service.IndustryStatisticsService;
-import io.github.packagewjx.brandreportbackend.service.report.BrandReportDataImporter;
+import io.github.packagewjx.brandreportbackend.service.report.score.ScoreAnnotations;
 import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.Context;
 import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.IndexScoreCounter;
 import io.github.packagewjx.brandreportbackend.service.report.score.scorecounter.ScoreCounterFactory;

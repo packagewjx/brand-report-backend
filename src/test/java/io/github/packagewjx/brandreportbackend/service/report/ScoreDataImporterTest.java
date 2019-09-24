@@ -5,7 +5,6 @@ import io.github.packagewjx.brandreportbackend.domain.Brand;
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
 import io.github.packagewjx.brandreportbackend.domain.Constants;
 import io.github.packagewjx.brandreportbackend.service.BrandService;
-import io.github.packagewjx.brandreportbackend.service.report.score.ScoreDataImporter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

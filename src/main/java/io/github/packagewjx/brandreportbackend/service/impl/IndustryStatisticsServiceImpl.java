@@ -128,7 +128,8 @@ public class IndustryStatisticsServiceImpl extends BaseServiceImpl<IndustryStati
             Collection<BrandReport> allByExample = (Collection<BrandReport>) brandReportService.getAllByExample(example);
             if (allByExample.size() == 0) {
                 // 构建报告
-                BrandReport report = brandReportService.buildReport(brand.getBrandId(), year, period, periodTimeNumber);
+                logger.info("正在构建用于统计的品牌为{}(ID:{})的临时品牌报告", brand.getBrandName(), brand.getBrandId());
+                BrandReport report = brandReportService.buildDataOnlyReport(brand.getBrandId(), year, period, periodTimeNumber);
                 brandReports.add(report);
             } else {
                 brandReports.add(allByExample.iterator().next());
