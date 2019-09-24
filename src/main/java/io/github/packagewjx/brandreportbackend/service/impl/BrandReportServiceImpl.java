@@ -8,6 +8,7 @@ import io.github.packagewjx.brandreportbackend.service.report.BrandReportDataImp
 import io.github.packagewjx.brandreportbackend.service.report.CollectionDataImporter;
 import io.github.packagewjx.brandreportbackend.service.report.CompositeDataImporter;
 import io.github.packagewjx.brandreportbackend.service.report.ScoreDataImporter;
+import io.github.packagewjx.brandreportbackend.service.report.FinancialDataImporter;
 import io.github.packagewjx.brandreportbackend.utils.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,9 @@ public class BrandReportServiceImpl extends BaseServiceImpl<BrandReport, String>
     private final CompositeDataImporter fullDataImporter;
 
     public BrandReportServiceImpl(BrandReportRepository repository,
-                                  ScoreDataImporter scoreDataImporter, CollectionDataImporter collectionDataImporter) {
+                                  ScoreDataImporter scoreDataImporter, CollectionDataImporter collectionDataImporter, FinancialDataImporter financialDataImporter) {
         super(repository);
-        fullDataImporter = new CompositeDataImporter(Lists.newArrayList(collectionDataImporter, scoreDataImporter));
+        fullDataImporter = new CompositeDataImporter(Lists.newArrayList(collectionDataImporter, scoreDataImporter, financialDataImporter));
         originalDataImporter = new CompositeDataImporter(Lists.newArrayList(collectionDataImporter));
     }
 
