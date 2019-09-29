@@ -1,6 +1,7 @@
 package io.github.packagewjx.brandreportbackend.service.report;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.packagewjx.brandreportbackend.config.FinancialDataSettings;
 import io.github.packagewjx.brandreportbackend.domain.BrandReport;
 import io.github.packagewjx.brandreportbackend.domain.data.Collection;
 import io.github.packagewjx.brandreportbackend.utils.LogUtils;
@@ -10,6 +11,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,6 +22,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class FinancialDataImporter implements BrandReportDataImporter {
     private static final Logger logger = LoggerFactory.getLogger(FinancialDataImporter.class);
+
+    @Autowired
+    FinancialDataSettings financialDataSettings;
+
     @Override
     public BrandReport importData(BrandReport brandReport) {
         if (brandReport == null) {
@@ -38,7 +44,7 @@ public class FinancialDataImporter implements BrandReportDataImporter {
         //http请求财报数据
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://localhost:5000/financial_data/"+ brandReport.getBrandId() +"/" + brandReport.getYear())
+                .url("http://"+ financialDataSettings.getDataSourceName() +":5000/financial_data/"+ brandReport.getBrandId() +"/" + brandReport.getYear())
                 .get() // get post put 等
                 .build();
         Call call = client.newCall(request);
